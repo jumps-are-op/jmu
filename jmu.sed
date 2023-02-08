@@ -67,6 +67,10 @@
 # mailto:me@mywebsite.org (My email)
 # <mailto:me@mywebsite.org> (My email)
 #
+# Text before a horizontal rule
+# ---
+# Text after a horizontal rule
+#
 # # TODO
 # NOTE: A note block.
 #
@@ -81,11 +85,6 @@
 # ```
 #
 # # TODO
-# Text before a horizontal rule
-# ---
-# Text after a horizontal rule
-#
-# # TODO
 # Table Name
 # Column 1 | Column 2
 # ----|----
@@ -94,10 +93,9 @@
 #
 # # TODO
 # Here is a sentence with a footnote^1.
-#
 # ^1 This is the footnote.
 #
-# A -- (long dash) character
+# A --- (long dash) character
 #
 # # TODO
 # A :smile: face emoji
@@ -119,6 +117,9 @@ s/[[:cntrl:]]/ /g;
 
 # If the line ends in "  " (two spaces), delete it and add a </br>
 s#  $#</br>#;
+
+# If the line is just dashes or equal signs, change it to a horizontal ruler
+s/^[=-][=-][=-][=-]*$/<hr\/>/;
 
 # Add line to hold space. (prefixed with a `newline` character)
 H;
@@ -216,6 +217,9 @@ s#\([^\\]\|^\)=\([[:alnum:]]*\)=#\1<sub>\2</sub>#g;
 # `code` text
 s#\([^\\]\|^\)`\(\(\\`\|[^`\n]\)*\)`#\1<code>\2</code>#g;
 
+# A --- long dash
+s#\([^\\]\|^\)---#\1\&ndash;#g;
+
 # TODO: Add images
 ## IMAGE: https://path/to/an/image.png @WIDTHxHEIGHT@ [https://path/to/go/when/user/clicks] (Image title) {Image alt}
 ## Image caption
@@ -239,13 +243,13 @@ s#\(<\|\)mailto\(:[a-zA-Z0-9/%?+&=\#_\.-]*\(@\|\)[a-zA-Z0-9/%?+&=\#_\.-]\+\)\(>\
 s#\(<\|\)mailto:\([a-zA-Z0-9/%?+&=\#_\.-]*\(@\|\)[a-zA-Z0-9/%?+&=\#_\.-]\+\)\(>\|\)#<a href="mailto:\2">\2</a>#g;
 
 # NOTE: To escape a local link, it should be like `\://path/to/a/local/link`
-# ://me@mywebsite.org (Link caption)
-# <://me@mywebsite.org> (Link caption)
-s#\(<\|\):/\(/[a-zA-Z0-9/%?+&=\#_\.-]\+\)\(>\|\)[[:space:]]*(\([^)\n]*\))#<a href="\2">\4</a>#g;
+# ://path/to/a/local/link (Link caption)
+# <://path/to/a/local/link> (Link caption)
+s#\([^\\]\|^\)\(<\|\):/\(/[a-zA-Z0-9/%?+&=\#_\.-]\+\)\(>\|\)[[:space:]]*(\([^)\n]*\))#\1<a href="\3">\5</a>#g;
 
-# ://me@mywebsite.org
-# <://me@mywebsite.org>
-s#\(<\|\)://\([a-zA-Z0-9/%?+&=\#_\.-]\+\)\(>\|\)#<a href="/\2">\2</a>#g;
+# ://path/to/a/local/link
+# <://path/to/a/local/link>
+s#\([^\\]\|^\)\(<\|\)://\([a-zA-Z0-9/%?+&=\#_\.-]\+\)\(>\|\)#<a href="/\3">\3</a>#g;
 
 # Headers
 /^<h[1-6]>/{ s/\\\(.\)/\1/g; p; s/.*//; x; d;}
