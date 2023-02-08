@@ -232,11 +232,11 @@ s#\(<\|\)\([[:alnum:]]\+://[a-zA-Z0-9/%?+&=\#_\.-]\+\)\(>\|\)#<a href="\2">\2</a
 # NOTE: To escape an email link, it should be like `mailto\:me@mywebsite.org`
 # mailto:me@mywebsite.org (Email caption)
 # <mailto:me@mywebsite.org> (Email caption)
-s#\(<\|\)mailto\(:[a-zA-Z0-9/%?+&=\#_\.-]\+\)\(>\|\)[[:space:]]*(\([^)\n]*\))#<a href="mailto\\\2">\4</a>#g;
+s#\(<\|\)\(mailto:[a-zA-Z0-9/%?+&=\#_\.-]\+\)\(>\|\)[[:space:]]*(\([^)\n]*\))#<a href="\2">\4</a>#g;
 
-# mailto:me@mywebsite.org (Email caption)
-# <mailto:me@mywebsite.org> (Email caption)
-s#\(<\|\)mailto\(:[a-zA-Z0-9/%?+&=\#_\.-]\+\)\(>\|\)[[:space:]]*(\([^)\n]*\))#<a href="mailto\\\2">\4</a>#g;
+# mailto:me@mywebsite.org
+# <mailto:me@mywebsite.org>
+s#\(<\|\)mailto:\([a-zA-Z0-9/%?+&=\#_\.-]\+\)\(>\|\)#<a href="mailto:\2">\2</a>#g;
 
 # Headers
 /^<h[1-6]>/{ s/\\\(.\)/\1/g; p; s/.*//; x; d;}
