@@ -227,16 +227,25 @@ s#\(<\|\)\([[:alnum:]]\+\)\(://[a-zA-Z0-9/%?+&=\#_\.-]\+\)\(>\|\)[[:space:]]*(\(
 
 # https://path/to/a/link
 # <https://path/to/a/link>
-s#\(<\|\)\([[:alnum:]]\+://[a-zA-Z0-9/%?+&=\#_\.-]\+\)\(>\|\)#<a href="\2">\2</a>#g;
+s#\(<\|\)\([[:alnum:]]\+\)\(://[a-zA-Z0-9/%?+&=\#_\.-]\+\)\(>\|\)#<a href="\2\\\3">\2\\\3</a>#g;
 
 # NOTE: To escape an email link, it should be like `mailto\:me@mywebsite.org`
 # mailto:me@mywebsite.org (Email caption)
 # <mailto:me@mywebsite.org> (Email caption)
-s#\(<\|\)\(mailto:[a-zA-Z0-9/%?+&=\#_\.-]\+\)\(>\|\)[[:space:]]*(\([^)\n]*\))#<a href="\2">\4</a>#g;
+s#\(<\|\)mailto\(:[a-zA-Z0-9/%?+&=\#_\.-]*\(@\|\)[a-zA-Z0-9/%?+&=\#_\.-]\+\)\(>\|\)[[:space:]]*(\([^)\n]*\))#<a href="mailto\\\2">\5</a>#g;
 
 # mailto:me@mywebsite.org
 # <mailto:me@mywebsite.org>
-s#\(<\|\)mailto:\([a-zA-Z0-9/%?+&=\#_\.-]\+\)\(>\|\)#<a href="mailto:\2">\2</a>#g;
+s#\(<\|\)mailto:\([a-zA-Z0-9/%?+&=\#_\.-]*\(@\|\)[a-zA-Z0-9/%?+&=\#_\.-]\+\)\(>\|\)#<a href="mailto:\2">\2</a>#g;
+
+# NOTE: To escape a local link, it should be like `\://path/to/a/local/link`
+# ://me@mywebsite.org (Link caption)
+# <://me@mywebsite.org> (Link caption)
+s#\(<\|\):/\(/[a-zA-Z0-9/%?+&=\#_\.-]\+\)\(>\|\)[[:space:]]*(\([^)\n]*\))#<a href="\2">\4</a>#g;
+
+# ://me@mywebsite.org
+# <://me@mywebsite.org>
+s#\(<\|\)://\([a-zA-Z0-9/%?+&=\#_\.-]\+\)\(>\|\)#<a href="/\2">\2</a>#g;
 
 # Headers
 /^<h[1-6]>/{ s/\\\(.\)/\1/g; p; s/.*//; x; d;}
