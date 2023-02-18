@@ -115,8 +115,8 @@ s/[[:cntrl:]]/ /g;
 # If the line is empty, branch to `start`.
 /^$/b start;
 
-# If the line ends in "  " (two spaces), delete it and add a </br>
-s#  $#</br>#;
+# If the line ends in "  " (two spaces), delete it and add a <br/>
+s#  $#<br/>#;
 
 # If the line is just dashes or equal signs, change it to a horizontal ruler
 s/^[=-][=-][=-][=-]*$/<hr\/>/;
