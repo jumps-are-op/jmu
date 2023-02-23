@@ -191,31 +191,31 @@ s/\n>[[:space:]]*/\n/g;
 /\n>/b embedtext;
 
 # **BOLD** text
-s#\([^\\]\|^\)\*\*\(\(\\\*\|[^\*\n]\)*\)\*\*#\1<b>\2</b>#g;
+s#\([^\\]\|^\)\*\*\(\(\\\*\|[^*]\)*\)\*\*#\1<b>\2</b>#g;
 
 # *Italic* text
-s#\([^\\]\|^\)\*\(\(\\\*\|[^\*\n]\)*\)\*#\1<i>\2</i>#g;
+s#\([^\\]\|^\)\*\(\(\\\*\|[^*]\)*\)\*#\1<i>\2</i>#g;
 
 # ~~Text with a stroke~~
 s#\([^\\]\|^\)[-~][-~]\(\(\\[-~]\|[^-~\n]\)*\)[-~][-~]#\1<del>\2</del>#g;
 
 # _Text with an underline_
-s#\([^\\]\|^\)_\(\(\\_\|[^_\n]\)*\)_#\1<ins>\2</ins>#g;
+s#\([^\\]\|^\)_\(\(\\_\|[^_]\)*\)_#\1<ins>\2</ins>#g;
 
 # ^super^ text
 # X^2^
-s#\([^\\]\|^\)\^\(\(\\\^\|[^\^\n]\)*\)\^#\1<sup>\2</sup>#g;
+s#\([^\\]\|^\)\^\(\(\\\^\|[^\^]\)*\)\^#\1<sup>\2</sup>#g;
 
 # ~sub~ text
 # H~2~O
-s#\([^\\]\|^\)~\(\(\\~\|[^~\n]\)*\)~#\1<sub>\2</sub>#g;
+s#\([^\\]\|^\)~\(\(\\~\|[^~]\)*\)~#\1<sub>\2</sub>#g;
 
 # =sub= script # Only works on alpha numeric characters
 # H=2=O
 s#\([^\\]\|^\)=\([[:alnum:]]*\)=#\1<sub>\2</sub>#g;
 
 # `code` text
-s#\([^\\]\|^\)`\(\(\\`\|[^`\n]\)*\)`#\1<code>\2</code>#g;
+s#\([^\\]\|^\)`\(\(\\`\|[^`]\)*\)`#\1<code>\2</code>#g;
 
 # A --- long dash
 s#\([^\\]\|^\)---#\1\&ndash;#g;
@@ -236,7 +236,7 @@ s#\(<\|\)\([[:alnum:]]\+\)\(://[a-zA-Z0-9/%?+&=\#_\.-]\+\)\(>\|\)#<a href="\2\\\
 # NOTE: To escape an email link, it should be like `mailto\:me@mywebsite.org`
 # mailto:me@mywebsite.org (Email caption)
 # <mailto:me@mywebsite.org> (Email caption)
-s#\(<\|\)mailto\(:[a-zA-Z0-9/%?+&=\#_\.-]*\(@\|\)[a-zA-Z0-9/%?+&=\#_\.-]\+\)\(>\|\)[[:space:]]*(\([^)\n]*\))#<a href="mailto\\\2">\5</a>#g;
+s#\(<\|\)mailto\(:[a-zA-Z0-9/%?+&=\#_\.-]*\(@\|\)[a-zA-Z0-9/%?+&=\#_\.-]\+\)\(>\|\)[[:space:]]*(\(\(\\)\|[^)]\)*\))#<a href="mailto\\\2">\5</a>#g;
 
 # mailto:me@mywebsite.org
 # <mailto:me@mywebsite.org>
@@ -245,7 +245,7 @@ s#\(<\|\)mailto:\([a-zA-Z0-9/%?+&=\#_\.-]*\(@\|\)[a-zA-Z0-9/%?+&=\#_\.-]\+\)\(>\
 # NOTE: To escape a local link, it should be like `\://path/to/a/local/link`
 # ://path/to/a/local/link (Link caption)
 # <://path/to/a/local/link> (Link caption)
-s#\([^\\]\|^\)\(<\|\):/\(/[a-zA-Z0-9/%?+&=\#_\.-]\+\)\(>\|\)[[:space:]]*(\([^)\n]*\))#\1<a href="\3">\5</a>#g;
+s#\([^\\]\|^\)\(<\|\):/\(/[a-zA-Z0-9/%?+&=\#_\.-]\+\)\(>\|\)[[:space:]]*(\(\(\\)\|[^)]\)*\))#\1<a href="\3">\5</a>#g;
 
 # ://path/to/a/local/link
 # <://path/to/a/local/link>
