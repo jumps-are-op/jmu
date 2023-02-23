@@ -3,20 +3,20 @@ unlet! b:current_syntax
 
 syn case ignore
 
-syn region jmuItalic start='\*' skip='\\\*' end='\*'
-syn region jmuBold start='\*\*' skip='\\\*' end='\*\*'
-syn region jmuUnderline start='_' skip='\\_' end='_'
-syn region jmuStrikethrough start='[-~][-~]' skip='\\[-~]' end='[-~][-~]'
-syn region jmuCodeInline start='`' skip='\\`' end='`'
+syn region jmuItalic start='\(^\|[^\\]\)\*' skip='\\\*' end='\*'
+syn region jmuBold start='\(^\|[^\\]\)\*\*' skip='\\\*' end='\*\*'
+syn region jmuUnderline start='\(^\|[^\\]\)_' skip='\\_' end='_'
+syn region jmuStrikethrough start='\(^\|[^\\]\)[-~][-~]' skip='\\[-~]' end='[-~][-~]'
+syn region jmuCodeInline start='\(^\|[^\\]\)`' skip='\\`' end='`'
 syn region jmuCodeBlock start='^```' end='^```$'
-syn match jmuNdash '---'
-syn match jmuEmoji ':[[:alnum:]_-]\+:'
+syn match jmuNdash '\(^\|[^\\]\)---'
+syn match jmuEmoji '\(^\|[^\\]\):[[:alnum:]_-]\+:'
 
-syn region jmuHItalic start='\*' skip='\\\*' end='\*' contained
-syn region jmuHBold start='\*\*' skip='\\\*' end='\*\*' contained
-syn region jmuHUnderline start='_' skip='\\_' end='_' contained
-syn region jmuHStrikethrough start='[-~][-~]' skip='\\[-~]' end='[-~][-~]' contained
-syn region jmuHCodeInline start='`' skip='\\`' end='`' contained
+syn region jmuHItalic start='\(^\|[^\\]\)\*' skip='\\\*' end='\*' contained
+syn region jmuHBold start='\(^\|[^\\]\)\*\*' skip='\\\*' end='\*\*' contained
+syn region jmuHUnderline start='\(^\|[^\\]\)_' skip='\\_' end='_' contained
+syn region jmuHStrikethrough start='\(^\|[^\\]\)[-~][-~]' skip='\\[-~]' end='[-~][-~]' contained
+syn region jmuHCodeInline start='\(^\|[^\\]\)`' skip='\\`' end='`' contained
 
 syn region jmuH1 start='^=[^=]' skip='\n=[^=]' end='$' contains=jmuHItalic,jmuHBold,jmuHUnderline,jmuHStrikethrough
 syn region jmuH2 start='^==[^=]' skip='\n==[^=]' end='$' contains=jmuHItalic,jmuHBold,jmuHUnderline,jmuHStrikethrough
@@ -27,10 +27,10 @@ syn region jmuH6 start='^======[^=]' skip='\n======[^=]' end='$' contains=jmuHIt
 
 syn region jmuEmbed start='^>\+' end='^>\+'
 
-syn region jmuCaption start='(' skip='\\(' end=')'
+syn region jmuCaption start='\(^\|[^\\]\)(' skip='\\(' end=')'
 syn match jmuLink '\(<\|\)[[:alnum:]]\+://[a-zA-Z0-9/%?+&=\#_\.-]\+\(>\|\)'
 syn match jmuMailtoLink '\(<\|\)mailto:[a-zA-Z0-9@/%?+&=\#_\.-]\+\(>\|\)'
-syn match jmuLocalLink '\(<\|\)://[a-zA-Z0-9/%?+&=\#_\.-]\+\(>\|\)'
+syn match jmuLocalLink '\(^\|[^\\]\)\(<\|\)://[a-zA-Z0-9/%?+&=\#_\.-]\+\(>\|\)'
 
 syn match jmuHr '^[=-][=-][=-][=-]*$'
 
