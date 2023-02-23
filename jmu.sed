@@ -7,7 +7,7 @@
 # "Jmu is a minimalist, expandable, and usable markup language" -- Jumps
 #
 # Backstory:
-# I was making my webpage (jumps-are-op.github.io)
+# I was making my webpage (~~jumps-are-op.github.io~~ now jumps.neocities.org)
 # and I needed to choose a markup language, the obvious choice was markdown
 # I already know some markdown and I started with it.
 # The more and more I use it I realize it's a bare bone language,
@@ -42,13 +42,18 @@
 # _Text with an underline_
 # ^super^ script
 # X^2^
-# =sub= script # Only works on alpha numeric charters
+# # Only works on alpha numeric charters
+# =sub= script
 # H=2=O
 # ~sub~ script
 # H~2~O
 # A `code` text
-# > embedded text
-# > *embedded* **text** ~with~ _attributes_
+# >
+#  embedded text
+# >>
+#  *embedded* **text** ~with~ _attributes_
+# >>
+# >
 #
 # = Header 1
 # == Header 2
@@ -79,7 +84,6 @@
 # 	Also a multi line
 # 	Note block (until the end of the paragraph)
 #
-# # TODO
 # ```sh
 # 	echo "A multi line code text"
 # ```
@@ -108,28 +112,28 @@
 
 # No matter what happen DO NOT ALLOW NON-PRINTABLE CHARACTERS IN HTML.
 s/&/\&amp;/g;
-s/&amp;\(#[0-9]\+\|[a-z]\+\);/\&\1;/g
+s/&amp;\(#[0-9]\+\|[a-z]\+\);/\&\1;/g;
 s/[[:space:]]\+<[[:space:]]\+/ \&lt; /g;
 s/[[:cntrl:]]/ /g;
 
-# If the line is empty, branch to `start`.
-/^$/b start;
-
-# If the line ends in "  " (two spaces), delete it and add a <br/>
-s#  $#<br/>#;
-
-# If the line is just dashes or equal signs, change it to a horizontal ruler
-s/^[=-][=-][=-][=-]*$/<hr\/>/;
+# If the line is a code block start, branch to `start`
+/^```[[:alnum:]]*$/{ b start;}
 
 # Add line to hold space. (prefixed with a `newline` character)
 H;
 
-
-# If the line is a valid header, branch to `start`.
-/^=\(\|=\|==\|===\|====\|=====\)[[:space:]]*[^=]\+$/b start
-
-# If the line ends in a single . (period), branch to `start`
-/\([^\.]\|^\)\.$/{ s/.*//; b start;}
+# If we are not in a ```code``` block, check for the following:
+# the line ends in a single . (period), branch to `start`
+# the line is a valid header, branch to `start`.
+# the line is empty, branch to `start`.
+x;
+/^```[[:alnum:]]*/!{ x;
+	/^=\(\|=\|==\|===\|====\|=====\)[[:space:]]*[^=]\+$/{ s/.*//; b start;}
+	/\([^\.]\|^\)\.$/{ s/.*//; b start;}
+	/^$/{ s/.*//; b start;}
+	x;
+}
+x;
 
 # If the line is the last line, branch to `start`.
 $b start;
@@ -151,8 +155,17 @@ x;
 # Well now there is a stray `newline` character at the start, delete it.
 s/^\n//;
 
+# ```CLASS code``` text
+/^```[[:alnum:]]*\n/{
+	# Hold space now have ```, move it to Patern space
+	x; s/.*//; x; s/$/```/
+	s#^```\([[:alnum:]]\+\)\n\(.*\)```$#<pre><code class="language-\1">\2\n</code></pre>#g;
+	s#^```\n\(.*\)```$#<pre><code>\1</code></pre>#g;
+	b end
+}
+
 # Delete lines starting with #.
-/^[[:space:]]*#/d;
+s/\(\n\|^\)[[:space:]]*#[^\n]*\(\n\|$\)/\2/g;
 
 # If main text is empty, start new cycle.
 /^$/b;
@@ -166,7 +179,17 @@ s/^\n//;
 # NOTE: Don't forget to add \1 at the start of the replacement string
 
 # If the line ends in \ (backslash), concatenate it with the next one.
-s/\\\n//g
+s/\\\n//g;
+
+# If the line ends in "  " (two spaces), delete it and add a <br/>
+s#  $#<br/>#;
+
+# If the line is just dashes or equal signs, change it to a horizontal ruler
+s/\(\n\|^\)[=-][=-][=-][=-]*\(\n\|$\)/\1<hr\/>\2/;
+
+
+# `code` text
+s#\([^\\]\|^\)`\(\(\\`\|[^`]\)*\)`#\1<code>\2</code>#g;
 
 # = Header
 s#^=[[:space:]]*\([^=]\+.*\)$#<h1>\1</h1>#;
@@ -184,11 +207,20 @@ s#\n====[[:space:]]*\([^=]\+.*\)$#</p>\n<h4>\1</h4>#;
 s#\n=====[[:space:]]*\([^=]\+.*\)$#</p>\n<h5>\1</h5>#;
 s#\n======[[:space:]]*\([^=]\+.*\)$#</p>\n<h6>\1</h6>#;
 
-# > embed text (recursively)
-:embedtext
-s#\(\n\|^\)\(>[[:space:]]*\(.[^\n]*\)\(\n\|$\)\)\+#<blockqoute>\n&\n</blockqoute>#g;
-s/\n>[[:space:]]*/\n/g;
-/\n>/b embedtext;
+# Only 9 levels are supported
+s#\(\n\|^\)>\{9\}\(\(\n[^>]\{9\}[^\n]*\)*\)\n>\{9\}\(\n\|$\)#\1<blockquote>\n<p>\2</p>\n</blockquote>\4#g;
+s#\(\n\|^\)>\{8\}\(\(\n[^>]\{8\}[^\n]*\)*\)\n>\{8\}\(\n\|$\)#\1<blockquote>\n<p>\2</p>\n</blockquote>\4#g;
+s#\(\n\|^\)>\{7\}\(\(\n[^>]\{7\}[^\n]*\)*\)\n>\{7\}\(\n\|$\)#\1<blockquote>\n<p>\2</p>\n</blockquote>\4#g;
+s#\(\n\|^\)>\{6\}\(\(\n[^>]\{6\}[^\n]*\)*\)\n>\{6\}\(\n\|$\)#\1<blockquote>\n<p>\2</p>\n</blockquote>\4#g;
+s#\(\n\|^\)>>>>>\(\(\n[^>]\{5\}[^\n]*\)*\)\n>>>>>\(\n\|$\)#\1<blockquote>\n<p>\2</p>\n</blockquote>\4#g;
+s#\(\n\|^\)>>>>\(\(\n[^>]\{4\}[^\n]*\)*\)\n>>>>\(\n\|$\)#\1<blockquote>\n<p>\2</p>\n</blockquote>\4#g;
+s#\(\n\|^\)>>>\(\(\n[^>]\{3\}[^\n]*\)*\)\n>>>\(\n\|$\)#\1<blockquote>\n<p>\2</p>\n</blockquote>\4#g;
+s#\(\n\|^\)>>\(\(\n[^>]\{2\}[^\n]*\)*\)\n>>\(\n\|$\)#\1<blockquote>\n<p>\2</p>\n</blockquote>\4#g;
+s#\(\n\|^\)>\(\(\n[^>][^\n]*\)*\)\n>\(\n\|$\)#\1<blockquote>\n<p>\2</p>\n</blockquote>\4#g;
+s#<p>\n*[[:space:]]*#<p>#g;
+s#[[:space:]]*\n*</p>#</p>#g;
+s#\n[[:space:]]*#\n#g;
+s#^[[:space:]]*##g;
 
 # **BOLD** text
 s#\([^\\]\|^\)\*\*\(\(\\\*\|[^*]\)*\)\*\*#\1<b>\2</b>#g;
@@ -213,9 +245,6 @@ s#\([^\\]\|^\)~\(\(\\~\|[^~]\)*\)~#\1<sub>\2</sub>#g;
 # =sub= script # Only works on alpha numeric characters
 # H=2=O
 s#\([^\\]\|^\)=\([[:alnum:]]*\)=#\1<sub>\2</sub>#g;
-
-# `code` text
-s#\([^\\]\|^\)`\(\(\\`\|[^`]\)*\)`#\1<code>\2</code>#g;
 
 # A --- long dash
 s#\([^\\]\|^\)---#\1\&ndash;#g;
@@ -249,7 +278,7 @@ s#\([^\\]\|^\)\(<\|\):/\(/[a-zA-Z0-9/%?+&=\#_\.-]\+\)\(>\|\)[[:space:]]*(\(\(\\)
 
 # ://path/to/a/local/link
 # <://path/to/a/local/link>
-s#\([^\\]\|^\)\(<\|\)://\([a-zA-Z0-9/%?+&=\#_\.-]\+\)\(>\|\)#<a href="/\3">\3</a>#g;
+s#\([^\\]\|^\)\(<\|\)://\([a-zA-Z0-9/%?+&=\#_\.-]\+\)\(>\|\)#\1<a href="/\3">\3</a>#g;
 
 # Headers
 /^<h[1-6]>/{ s/\\\(.\)/\1/g; p; s/.*//; x; d;}
@@ -257,9 +286,17 @@ s#\([^\\]\|^\)\(<\|\)://\([a-zA-Z0-9/%?+&=\#_\.-]\+\)\(>\|\)#<a href="/\3">\3</a
 # EDGE CASE: No empty line before a header.
 /\n<h[1-6]>[^\n]*<\/h[1-6]>$/{ s/^/<p>/; s/\\\(.\)/\1/g; p; s/.*//; x; d;}
 
+# Blockquote
+/^<blockquote>/{ s/\\\(.\)/\1/g; p; s/.*//; x; d;}
+
 # Paragraphs
 s#^#<p>#;
 s#$#</p>#;
+
+# Escape
 s/\\\(.\)/\1/g;
+
+# End
+:end;
 p;
 d;
