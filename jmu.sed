@@ -182,10 +182,10 @@ s/\(\n\|^\)[[:space:]]*#[^\n]*\(\n\|$\)/\2/g;
 s/\\\n//g;
 
 # If the line ends in "  " (two spaces), delete it and add a <br/>
-s#  $#<br/>#;
+s#  \(\n\|$\)#<br/>\1#g;
 
 # If the line is just dashes or equal signs, change it to a horizontal ruler
-s/\(\n\|^\)[=-][=-][=-][=-]*\(\n\|$\)/\1<hr\/>\2/;
+s#\(\n\|^\)[=-][=-][=-][=-]*\(\n\|$\)#\1<hr/>\2#g;
 
 
 # `code` text
