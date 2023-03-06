@@ -3,7 +3,7 @@ All markup languages are overcomplicated and bloated.
 Jmu is a minimalist, expandable, and usable markup language.
 
 == Backstory
-I was making my https://jumps-are-op.github.io (webpage)
+I was making my https://jumps.neocities.org (webpage)
 and I needed to choose a markup language, the obvious choice was `markdown`
 I already know some markdown and I started with it.  
 The more and more I use it I realize it's a *_bare bone_* language,
