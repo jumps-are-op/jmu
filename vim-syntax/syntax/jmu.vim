@@ -2,39 +2,45 @@ runtime! syntax/html.vim
 unlet! b:current_syntax
 
 syn case ignore
+syn spell toplevel
 
-syn region jmuItalic start='\(^\|[^\\]\)\*' skip='\\\*' end='\*'
-syn region jmuBold start='\(^\|[^\\]\)\*\*' skip='\\\*' end='\*\*'
-syn region jmuUnderline start='\(^\|[^\\]\)_' skip='\\_' end='_'
-syn region jmuStrikethrough start='\(^\|[^\\]\)[-~][-~]' skip='\\[-~]' end='[-~][-~]'
-syn region jmuCodeInline start='\(^\|[^\\]\)`' skip='\\`' end='`'
-syn region jmuCodeBlock start='^```' end='^```$'
-syn match jmuNdash '\(^\|[^\\]\)---'
-syn match jmuEmoji '\(^\|[^\\]\):[[:alnum:]_-]\+:'
+syn region jmuCaption start='(' end=')'
+syn match jmuNdash '---'
+syn match jmuEmoji ':[[:alnum:]_-]\+:'
+syn region jmuCodeBlock start='^```[[:alnum:]]*$' end='^```$'
 
-syn region jmuHItalic start='\(^\|[^\\]\)\*' skip='\\\*' end='\*' contained
-syn region jmuHBold start='\(^\|[^\\]\)\*\*' skip='\\\*' end='\*\*' contained
-syn region jmuHUnderline start='\(^\|[^\\]\)_' skip='\\_' end='_' contained
-syn region jmuHStrikethrough start='\(^\|[^\\]\)[-~][-~]' skip='\\[-~]' end='[-~][-~]' contained
-syn region jmuHCodeInline start='\(^\|[^\\]\)`' skip='\\`' end='`' contained
+syn cluster jmuAttrs contains=jmuItalic,jmuBold,jmuUnderline,jmuStrikethrough,jmuCodeInline
+syn region jmuItalic start='\*' end='\*'
+syn region jmuBold start='\*\*' end='\*\*'
+syn region jmuUnderline start='_' end='_'
+syn region jmuCodeInline start='`' end='`'
+syn region jmuStrikethrough start='[-~][-~]' end='[-~][-~]'
 
-syn region jmuH1 start='^=[^=]' skip='\n=[^=]' end='$' contains=jmuHItalic,jmuHBold,jmuHUnderline,jmuHStrikethrough
-syn region jmuH2 start='^==[^=]' skip='\n==[^=]' end='$' contains=jmuHItalic,jmuHBold,jmuHUnderline,jmuHStrikethrough
-syn region jmuH3 start='^===[^=]' skip='\n===[^=]' end='$' contains=jmuHItalic,jmuHBold,jmuHUnderline,jmuHStrikethrough
-syn region jmuH4 start='^====[^=]' skip='\n====[^=]' end='$' contains=jmuHItalic,jmuHBold,jmuHUnderline,jmuHStrikethrough
-syn region jmuH5 start='^=====[^=]' skip='\n=====[^=]' end='$' contains=jmuHItalic,jmuHBold,jmuHUnderline,jmuHStrikethrough
-syn region jmuH6 start='^======[^=]' skip='\n======[^=]' end='$' contains=jmuHItalic,jmuHBold,jmuHUnderline,jmuHStrikethrough
+syn cluster jmuHAttrs contains=jmuHItalic,jmuHBold,jmuHUnderline,jmuHStrikethrough,jmuHCodeInline
+syn region jmuHItalic start='\*[^*]' end='\*' contained
+syn region jmuHBold start='\*\*' end='\*\*' contained
+syn region jmuHUnderline start='_' end='_' contained
+syn region jmuHStrikethrough start='[-~][-~]' end='[-~][-~]' contained
+syn region jmuHCodeInline start='`' end='`' contained
 
-syn region jmuEmbed start='^>\+' end='^>\+'
+syn region jmuH1 start='^=[^=]' skip='\n=[^=]' end='$' contains=@jmuHAttrs
+syn region jmuH2 start='^==[^=]' skip='\n==[^=]' end='$' contains=@jmuHAttrs
+syn region jmuH3 start='^===[^=]' skip='\n===[^=]' end='$' contains=@jmuHAttrs
+syn region jmuH4 start='^====[^=]' skip='\n====[^=]' end='$' contains=@jmuHAttrs
+syn region jmuH5 start='^=====[^=]' skip='\n=====[^=]' end='$' contains=@jmuHAttrs
+syn region jmuH6 start='^======[^=]' skip='\n======[^=]' end='$' contains=@jmuHAttrs
 
-syn region jmuCaption start='\(^\|[^\\]\)(' skip='\\(' end=')'
+syn match jmuEmbed '^>\+[[:space:]]*$'
+
+syn match jmuLocalLink '\(<\|\)://[a-zA-Z0-9/%?+&=\#_\.-]\+\(>\|\)'
 syn match jmuLink '\(<\|\)[[:alnum:]]\+://[a-zA-Z0-9/%?+&=\#_\.-]\+\(>\|\)'
 syn match jmuMailtoLink '\(<\|\)mailto:[a-zA-Z0-9@/%?+&=\#_\.-]\+\(>\|\)'
-syn match jmuLocalLink '\(^\|[^\\]\)\(<\|\)://[a-zA-Z0-9/%?+&=\#_\.-]\+\(>\|\)'
 
 syn match jmuHr '^[=-][=-][=-][=-]*$'
 
 syn match jmuComment '^[[:space:]]*#.*$'
+
+syn match jmuEscape '\\.'
 
 hi def link jmuComment Comment
 
@@ -47,18 +53,32 @@ hi def link jmuCodeBlock htmlSpecialChar
 hi def link jmuNdash htmlSpecialChar
 hi def link jmuEmoji htmlSpecialChar
 
+hi def link jmuItalicBold          htmlItalicBold
+hi def link jmuItalicBoldUnderline htmlItalicBoldUnderline
+hi def link jmuItalicUnderline     htmlItalicUnderline 
+hi def link jmuItalicUnderlineBold htmlItalicUnderlineBold
+hi def link jmuBoldItalic          htmlBoldItalic
+hi def link jmuBoldItalicUnderline htmlBoldItalicUnderline
+hi def link jmuBoldUnderline       htmlBoldUnderline
+hi def link jmuBoldUnderlineItalic htmlBoldUnderlineItalic
+hi def link jmuUnderlineItalic     htmlUnderlineItalic
+hi def link jmuUnderlineItalicBold htmlUnderlineItalicBold
+hi def link jmuUnderlineBold       htmlUnderlineBold
+hi def link jmuUnderlineBoldItalic htmlUnderlineBoldItalic
+
+
 hi def link jmuHItalic HItalic
 hi def link jmuHBold HBold
 hi def link jmuHUnderline HUnderline
 hi def link jmuHStrikethrough HStrikethrough
 hi def link jmuHCodeInline HStrikethrough
 
-hi def link jmuH1 htmlSpecialChar
-hi def link jmuH2 htmlSpecialChar
-hi def link jmuH3 htmlSpecialChar
-hi def link jmuH4 htmlSpecialChar
-hi def link jmuH5 htmlSpecialChar
-hi def link jmuH6 htmlSpecialChar
+hi def link jmuH1 Title
+hi def link jmuH2 Title
+hi def link jmuH3 Title
+hi def link jmuH4 Title
+hi def link jmuH5 Title
+hi def link jmuH6 Title
 
 hi def link jmuEmbed htmlSpecialChar
 
@@ -69,7 +89,21 @@ hi def link jmuLocalLink htmlLink
 
 hi def link jmuHr htmlSpecialChar
 
-hi HItalic term=italic cterm=italic gui=italic ctermfg=224 guifg=Orange
-hi HBold term=bold cterm=bold gui=bold ctermfg=224 guifg=Orange
-hi HUnderline term=underline cterm=underline gui=underline ctermfg=224 guifg=Orange
-hi HStrikethrough term=strikethrough cterm=strikethrough gui=strikethrough ctermfg=224 guifg=Orange
+hi def link jmuEscape htmlSpecialChar
+
+hi jmuHItalic term=italic cterm=italic gui=italic ctermfg=224 guifg=Orange
+hi jmuHBold term=bold cterm=bold gui=bold ctermfg=224 guifg=Orange
+hi jmuHUnderline term=underline cterm=underline gui=underline ctermfg=224 guifg=Orange
+hi jmuHStrikethrough term=strikethrough cterm=strikethrough gui=strikethrough ctermfg=224 guifg=Orange
+hi jmuHItalicBold term=italic,bold cterm=italic,bold gui=italic,bold ctermfg=224 guifg=Orange
+hi jmuHItalicBoldUnderline term=italic,bold,underline cterm=italic,bold,underline gui=italic,bold,underline ctermfg=224 guifg=Orange
+hi jmuHItalicUnderline term=italic,underline cterm=italic,underline gui=italic,underline ctermfg=224 guifg=Orange
+hi jmuHItalicUnderlineBold term=italic,underline,bold cterm=italic,underline,bold gui=italic,underline,bold ctermfg=224 guifg=Orange
+hi jmuHBoldItalic term=bold,italic cterm=bold,italic gui=bold,italic ctermfg=224 guifg=Orange
+hi jmuHBoldItalicUnderline term=bold,italic,underline cterm=bold,italic,underline gui=bold,italic,underline ctermfg=224 guifg=Orange
+hi jmuHBoldUnderline term=bold,underline cterm=bold,underline gui=bold,underline ctermfg=224 guifg=Orange
+hi jmuHBoldUnderlineItalic term=bold,underline,italic cterm=bold,underline,italic gui=bold,underline,italic ctermfg=224 guifg=Orange
+hi jmuHUnderlineItalic term=underline,italic cterm=underline,italic gui=underline,italic ctermfg=224 guifg=Orange
+hi jmuHUnderlineItalicBold term=underline,italic,bold cterm=underline,italic,bold gui=underline,italic,bold ctermfg=224 guifg=Orange
+hi jmuHUnderlineBold term=underline,bold cterm=underline,bold gui=underline,bold ctermfg=224 guifg=Orange
+hi jmuHUnderlineBoldItalic term=underline,bold,italic cterm=underline,bold,italic gui=underline,bold,italic ctermfg=224 guifg=Orange
