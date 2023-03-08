@@ -8,4 +8,4 @@
 	EOF
 	exit 1
 }
-cp -r -- vim-syntax/* "$1"
+cp -r -- vim-syntax/*/ "$1"
