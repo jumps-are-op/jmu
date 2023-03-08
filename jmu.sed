@@ -192,20 +192,12 @@ s#\(\n\|^\)[=-][=-][=-][=-]*\(\n\|$\)#\1<hr/>\2#g;
 s#\([^\\]\|^\)`\(\(\\`\|[^`]\)*\)`#\1<code>\2</code>#g;
 
 # = Header
-s#^=[[:space:]]*\([^=]\+.*\)$#<h1>\1</h1>#;
-s#^==[[:space:]]*\([^=]\+.*\)$#<h2>\1</h2>#;
-s#^===[[:space:]]*\([^=]\+.*\)$#<h3>\1</h3>#;
-s#^====[[:space:]]*\([^=]\+.*\)$#<h4>\1</h4>#;
-s#^=====[[:space:]]*\([^=]\+.*\)$#<h5>\1</h5>#;
-s#^======[[:space:]]*\([^=]\+.*\)$#<h6>\1</h6>#;
-
-# EDGE CASE: No empty line before a header.
-s#\n=[[:space:]]*\([^=]\+.*\)$#</p>\n<h1>\1</h1>#;
-s#\n==[[:space:]]*\([^=]\+.*\)$#</p>\n<h2>\1</h2>#;
-s#\n===[[:space:]]*\([^=]\+.*\)$#</p>\n<h3>\1</h3>#;
-s#\n====[[:space:]]*\([^=]\+.*\)$#</p>\n<h4>\1</h4>#;
-s#\n=====[[:space:]]*\([^=]\+.*\)$#</p>\n<h5>\1</h5>#;
-s#\n======[[:space:]]*\([^=]\+.*\)$#</p>\n<h6>\1</h6>#;
+s#\(\n\|^\)=[[:space:]]*\([^=]\+.*\)$#<h1>\1</h1>#;
+s#\(\n\|^\)==[[:space:]]*\([^=]\+.*\)$#<h2>\1</h2>#;
+s#\(\n\|^\)===[[:space:]]*\([^=]\+.*\)$#<h3>\1</h3>#;
+s#\(\n\|^\)====[[:space:]]*\([^=]\+.*\)$#<h4>\1</h4>#;
+s#\(\n\|^\)=====[[:space:]]*\([^=]\+.*\)$#<h5>\1</h5>#;
+s#\(\n\|^\)======[[:space:]]*\([^=]\+.*\)$#<h6>\1</h6>#;
 
 # Only 9 levels are supported
 s#\(\n\|^\)>\{9\}\(\(\n[^>]\{9\}[^\n]*\)*\)\n>\{9\}\(\n\|$\)#\1<blockquote>\n<p>\2</p>\n</blockquote>\4#g;
@@ -223,7 +215,7 @@ s#\n[[:space:]]*#\n#g;
 s#^[[:space:]]*##g;
 
 # **BOLD** text
-s#\([^\\]\|^\)\*\*\(\(\\\*\|[^*]\)*\)\*\*#\1<b>\2</b>#g;
+s#\([^\\]\|^\)\*\*\(\(\\\*\|[^*]\|\*[^*]\)*\)\*\*#\1<b>\2</b>#g;
 
 # *Italic* text
 s#\([^\\]\|^\)\*\(\(\\\*\|[^*]\)*\)\*#\1<i>\2</i>#g;
@@ -254,26 +246,35 @@ s#\([^\\]\|^\)---#\1\&ndash;#g;
 ## Image caption
 
 # NOTE: To escape a link, it should be like `https\://an/escaped/link`
+# (Link caption) https://path/to/a/link
+# (Link caption) <https://path/to/a/link>
 # https://path/to/a/link (Link caption)
 # <https://path/to/a/link> (Link caption)
 s#\(<\|\)\([[:alnum:]]\+\)\(://[a-zA-Z0-9/%?+&=\#_\.-]\+\)\(>\|\)[[:space:]]*(\([^)\n]*\))#<a href="\2\\\3">\5</a>#g;
+s#(\([^)\n]*\))[[:space:]]*\(<\|\)\([[:alnum:]]\+\)\(://[a-zA-Z0-9/%?+&=\#_\.-]\+\)\(>\|\)#<a href="\3\\\4">\1</a>#g;
 
 # https://path/to/a/link
 # <https://path/to/a/link>
 s#\(<\|\)\([[:alnum:]]\+\)\(://[a-zA-Z0-9/%?+&=\#_\.-]\+\)\(>\|\)#<a href="\2\\\3">\2\\\3</a>#g;
 
 # NOTE: To escape an email link, it should be like `mailto\:me@mywebsite.org`
+# (Email caption) mailto:me@mywebsite.org
+#  (Email caption)<mailto:me@mywebsite.org>
 # mailto:me@mywebsite.org (Email caption)
 # <mailto:me@mywebsite.org> (Email caption)
 s#\(<\|\)mailto\(:[a-zA-Z0-9/%?+&=\#_\.-]*\(@\|\)[a-zA-Z0-9/%?+&=\#_\.-]\+\)\(>\|\)[[:space:]]*(\(\(\\)\|[^)]\)*\))#<a href="mailto\\\2">\5</a>#g;
+s#(\(\(\\)\|[^)]\)*\))[[:space:]]*\(<\|\)mailto\(:[a-zA-Z0-9/%?+&=\#_\.-]*\(@\|\)[a-zA-Z0-9/%?+&=\#_\.-]\+\)\(>\|\)#<a href="mailto\\\3">\1</a>#g;
 
 # mailto:me@mywebsite.org
 # <mailto:me@mywebsite.org>
 s#\(<\|\)mailto:\([a-zA-Z0-9/%?+&=\#_\.-]*\(@\|\)[a-zA-Z0-9/%?+&=\#_\.-]\+\)\(>\|\)#<a href="mailto:\2">\2</a>#g;
 
 # NOTE: To escape a local link, it should be like `\://path/to/a/local/link`
+# (Link caption) ://path/to/a/local/link
+# (Link caption) <://path/to/a/local/link>
 # ://path/to/a/local/link (Link caption)
 # <://path/to/a/local/link> (Link caption)
+s#(\(\(\\)\|[^)]\)*\))[[:space:]]*\([^\\]\|^\)\(<\|\):/\(/[a-zA-Z0-9/%?+&=\#_\.-]\+\)\(>\|\)#\1<a href="\3">\5</a>#g;
 s#\([^\\]\|^\)\(<\|\):/\(/[a-zA-Z0-9/%?+&=\#_\.-]\+\)\(>\|\)[[:space:]]*(\(\(\\)\|[^)]\)*\))#\1<a href="\3">\5</a>#g;
 
 # ://path/to/a/local/link
@@ -291,7 +292,7 @@ s#\([^\\]\|^\)\(<\|\)://\([a-zA-Z0-9/%?+&=\#_\.-]\+\)\(>\|\)#\1<a href="/\3">\3<
 
 # Paragraphs
 s#^#<p>#;
-s#$#</p>#;
+s#[[:space:]]*$#</p>#;
 
 # Escape
 s/\\\(.\)/\1/g;
