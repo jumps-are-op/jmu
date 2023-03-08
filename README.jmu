@@ -3,7 +3,7 @@ All markup languages are overcomplicated and bloated.
 Jmu is a minimalist, expandable, and usable markup language.
 
 == Backstory
-I was making my https://jumps.neocities.org (webpage)
+I was making my (webpage) https://jumps.neocities.org
 and I needed to choose a markup language, the obvious choice was `markdown`
 I already know some markdown and I started with it.  
 The more and more I use it I realize it's a *_bare bone_* language,
@@ -15,7 +15,7 @@ and I can't even use it,
 which contains non-free packages and is **PROPRIETARY**.  
 I use Parabola GNU/Linux-libre (*Arch Linux without non-free software*)
 I only use 100% free software, I will _NEVER_ install any proprietary blob.  
-So I created jmu, A minimalist, expandable, and usable markup language.  
+So I created jmu, A minimalist, expandable, and usable markup language.
 
 == How?
 Well you know `sed` right?
@@ -24,6 +24,6 @@ and a markup language is just a copy/paste tool to transform text to **HTML**.
 
 == Why sed?
 Just thinking out of the box,
-https://en.wikipedia.org/wiki/Sed (sed) is a POSIX-compliant tool,
+(sed) https://en.wikipedia.org/wiki/Sed is a POSIX-compliant tool,
 all of its existence is just to copy/paste text and manipulating text,
 and it exists on almost all UNIX™-like systems, so why not?
