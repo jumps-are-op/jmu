@@ -37,15 +37,30 @@ A `code` text
 ===== Header 5
 ====== Header 6
 
+IMAGE: https://path/to/an/image.png 10x20
+src="value"
+Caption
+
 https://path/to/a/link
 <https://path/to/a/link>
 https://path/to/a/link (Link caption)
 <https://path/to/a/link> (Link caption)
+(Link caption) https://path/to/a/link
+(Link caption) <https://path/to/a/link>
 
 mailto:me@mywebsite.org
 <mailto:me@mywebsite.org>
 mailto:me@mywebsite.org (My email)
 <mailto:me@mywebsite.org> (My email)
+(My email) mailto:me@mywebsite.org
+(My email) <mailto:me@mywebsite.org>
+
+://path/to/a/local/link
+<://path/to/a/local/link>
+://path/to/a/local/link (Link caption)
+<://path/to/a/local/link> (Link caption)
+(Link caption) ://path/to/a/local/link
+(Link caption) <://path/to/a/local/link>
 
 Text before a horizontal rule
 ---

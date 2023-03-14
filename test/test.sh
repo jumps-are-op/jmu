@@ -147,43 +147,120 @@ EOF
 <h6>Header 6</h6>
 EOF
 
+# IMAGE: https://path/to/an/image.png
+# [HTML ATTRIBUTES]
+# Image caption until the end of the paragraph.
+testjmu 3<<-EOF 4<<-EOF
+IMAGE: https://path/to/an/image.png
+attr="value"
+caption.
+EOF
+<p><figure>
+<a href="https://path/to/an/image.png"> <img src="https://path/to/an/image.png" attr="value"> </a>
+<figcaption>caption.</figcaption></figure></p>
+EOF
+# IMAGE: https://path/to/an/image.png WIDTH[*|X|x| ]HEIGHT
+# [HTML ATTRIBUTES]
+# Image caption until the end of the paragraph.
+testjmu 3<<-EOF 4<<-EOF
+IMAGE: https://path/to/an/image.png 10x20
+attr="value"
+caption.
+EOF
+<p><figure>
+<a href="https://path/to/an/image.png"> <img src="https://path/to/an/image.png" width="10" height="20" attr="value"> </a>
+<figcaption>caption.</figcaption></figure></p>
+EOF
+
+# IMAGE: ://path/to/a/local/image.png
+# [HTML ATTRIBUTES]
+# Image caption until the end of the paragraph.
+testjmu 3<<-EOF 4<<-EOF
+IMAGE: ://path/to/a/local/image.png
+attr="value"
+caption.
+EOF
+<p><figure>
+<a href="/path/to/a/local/image.png"> <img src="/path/to/a/local/image.png" attr="value"> </a>
+<figcaption>caption.</figcaption></figure></p>
+EOF
+# IMAGE: ://path/to/a/local/image.png WIDTH[*|X|x| ]HEIGHT
+# [HTML ATTRIBUTES]
+# Image caption until the end of the paragraph.
+testjmu 3<<-EOF 4<<-EOF
+IMAGE: ://path/to/a/local/image.png 10x20
+attr="value"
+caption.
+EOF
+<p><figure>
+<a href="/path/to/a/local/image.png"> <img src="/path/to/a/local/image.png" width="10" height="20" attr="value"> </a>
+<figcaption>caption.</figcaption></figure></p>
+EOF
+
+# NOTE: Link captions can be on another link of a link,
+# NOTE: this is a feature not a bug!
+# NOTE: forward captions have priority over backward captions
 # https://path/to/a/link
 # <https://path/to/a/link>
 # https://path/to/a/link (Link caption)
 # <https://path/to/a/link> (Link caption)
+# (Link caption) https://path/to/a/link
+# (Link caption) <https://path/to/a/link>
 # mailto:me@mywebsite.org
 # <mailto:me@mywebsite.org>
 # mailto:me@mywebsite.org (My email)
 # <mailto:me@mywebsite.org> (My email)
+# (My email) mailto:me@mywebsite.org
+# (My email) <mailto:me@mywebsite.org>
 # ://path/to/a/local/link
 # <://path/to/a/local/link>
 # ://path/to/a/local/link (Link caption)
 # <://path/to/a/local/link> (Link caption)
+# (Link caption) ://path/to/a/local/link
+# (Link caption) <://path/to/a/local/link>
 testjmu 3<<-EOF 4<<-EOF
 https://path/to/a/link
 <https://path/to/a/link>
 https://path/to/a/link (Link caption)
 <https://path/to/a/link> (Link caption)
+(Link caption) https://path/to/a/link
+--
+(Link caption) <https://path/to/a/link>
 mailto:me@mywebsite.org
 <mailto:me@mywebsite.org>
 mailto:me@mywebsite.org (My email)
 <mailto:me@mywebsite.org> (My email)
+(My email) mailto:me@mywebsite.org
+--
+(My email) <mailto:me@mywebsite.org>
 ://path/to/a/local/link
 <://path/to/a/local/link>
 ://path/to/a/local/link (Link caption)
 <://path/to/a/local/link> (Link caption)
+(Link caption) ://path/to/a/local/link
+--
+(Link caption) <://path/to/a/local/link>
 EOF
 <p><a href="https://path/to/a/link">https://path/to/a/link</a>
 <a href="https://path/to/a/link">https://path/to/a/link</a>
 <a href="https://path/to/a/link">Link caption</a>
 <a href="https://path/to/a/link">Link caption</a>
+<a href="https://path/to/a/link">Link caption</a>
+--
+<a href="https://path/to/a/link">Link caption</a>
 <a href="mailto:me@mywebsite.org">me@mywebsite.org</a>
 <a href="mailto:me@mywebsite.org">me@mywebsite.org</a>
 <a href="mailto:me@mywebsite.org">My email</a>
+<a href="mailto:me@mywebsite.org">My email</a>
+<a href="mailto:me@mywebsite.org">My email</a>
+--
 <a href="mailto:me@mywebsite.org">My email</a>
 <a href="/path/to/a/local/link">path/to/a/local/link</a>
 <a href="/path/to/a/local/link">path/to/a/local/link</a>
 <a href="/path/to/a/local/link">Link caption</a>
+<a href="/path/to/a/local/link">Link caption</a>
+<a href="/path/to/a/local/link">Link caption</a>
+--
 <a href="/path/to/a/local/link">Link caption</a></p>
 EOF
 

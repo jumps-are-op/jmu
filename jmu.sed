@@ -101,6 +101,10 @@
 #
 # A --- (long dash) character
 #
+# IMAGE: https://path/to/an/image.png [WIDTH[*|X|x| ]HEIGHT]
+# [HTML ATTRIBUTES]
+# Image caption until the end of the paragraph.
+#
 # # TODO
 # A :smile: face emoji
 #
@@ -129,7 +133,7 @@ H;
 x;
 /^```[[:alnum:]]*/!{ x;
 	/^=\(\|=\|==\|===\|====\|=====\)[[:space:]]*[^=]\+$/{ s/.*//; b start;}
-	/\([^\.]\|^\)\.$/{ s/.*//; b start;}
+	/\([^.]\|^\)\.$/{ s/.*//; b start;}
 	/^$/{ s/.*//; b start;}
 	x;
 }
@@ -192,12 +196,12 @@ s#\(\n\|^\)[=-][=-][=-][=-]*\(\n\|$\)#\1<hr/>\2#g;
 s#\([^\\]\|^\)`\(\(\\`\|[^`]\)*\)`#\1<code>\2</code>#g;
 
 # = Header
-s#\(\n\|^\)=[[:space:]]*\([^=]\+.*\)$#<h1>\1</h1>#;
-s#\(\n\|^\)==[[:space:]]*\([^=]\+.*\)$#<h2>\1</h2>#;
-s#\(\n\|^\)===[[:space:]]*\([^=]\+.*\)$#<h3>\1</h3>#;
-s#\(\n\|^\)====[[:space:]]*\([^=]\+.*\)$#<h4>\1</h4>#;
-s#\(\n\|^\)=====[[:space:]]*\([^=]\+.*\)$#<h5>\1</h5>#;
-s#\(\n\|^\)======[[:space:]]*\([^=]\+.*\)$#<h6>\1</h6>#;
+s#\(\n\|^\)=[[:space:]]*\([^=]\+.*\)$#<h1>\2</h1>#;
+s#\(\n\|^\)==[[:space:]]*\([^=]\+.*\)$#<h2>\2</h2>#;
+s#\(\n\|^\)===[[:space:]]*\([^=]\+.*\)$#<h3>\2</h3>#;
+s#\(\n\|^\)====[[:space:]]*\([^=]\+.*\)$#<h4>\2</h4>#;
+s#\(\n\|^\)=====[[:space:]]*\([^=]\+.*\)$#<h5>\2</h5>#;
+s#\(\n\|^\)======[[:space:]]*\([^=]\+.*\)$#<h6>\2</h6>#;
 
 # Only 9 levels are supported
 s#\(\n\|^\)>\{9\}\(\(\n[^>]\{9\}[^\n]*\)*\)\n>\{9\}\(\n\|$\)#\1<blockquote>\n<p>\2</p>\n</blockquote>\4#g;
@@ -241,51 +245,72 @@ s#\([^\\]\|^\)=\([[:alnum:]]*\)=#\1<sub>\2</sub>#g;
 # A --- long dash
 s#\([^\\]\|^\)---#\1\&ndash;#g;
 
-# TODO: Add images
-## IMAGE: https://path/to/an/image.png @WIDTHxHEIGHT@ [https://path/to/go/when/user/clicks] (Image title) {Image alt}
-## Image caption
+# IMAGE: https://path/to/an/image.png [WIDTH[*|X|x| ]HEIGHT]
+# [HTML ATTRIBUTES]
+# Image caption until the end of the paragraph.
+s#\(\n\|^\)[[:space:]]*[Ii][Mm][Aa][Gg][Ee][[:space:]]*:[[:space:]]*<\{0,1\}\([[:alnum:]]\+\)\(://[a-zA-Z0-9/%?+&=\#_.-]\+\)>\{0,1\}[[:space:]]*\([0-9]\+\)[*Xx ]\([0-9]\+\)\
+\(\(\\\n\|[^\n]\)*\)\
+\(.*\)\(\n\|\)#<figure>\
+<a href="\2\\\3"> <img src="\2\\\3" width="\4" height="\5" \6> </a>\
+<figcaption>\8</figcaption></figure>#
+s#\(\n\|^\)[[:space:]]*[Ii][Mm][Aa][Gg][Ee][[:space:]]*:[[:space:]]*<\{0,1\}\([[:alnum:]]\+\)\(://[a-zA-Z0-9/%?+&=\#_.-]\+\)>\{0,1\}[[:space:]]*\
+\(\(\\\n\|[^\n]\)*\)\
+\(.*\)\(\n\|\)#<figure>\
+<a href="\2\\\3"> <img src="\2\\\3" \4> </a>\
+<figcaption>\6</figcaption></figure>#
+
+# IMAGE: ://path/to/a/local/image.png [WIDTH[*|X|x| ]HEIGHT]
+# [HTML ATTRIBUTES]
+# Image caption until the end of the paragraph.
+s#\(\n\|^\)[[:space:]]*[Ii][Mm][Aa][Gg][Ee][[:space:]]*:[[:space:]]*<\{0,1\}:/\(/[a-zA-Z0-9/%?+&=\#_.-]\+\)>\{0,1\}[[:space:]]*\([0-9]\+\)[*Xx ]\([0-9]\+\)\
+\(\(\\\n\|[^\n]\)*\)\
+\(.*\)\(\n\|\)#<figure>\
+<a href="\2"> <img src="\2" width="\3" height="\4" \5> </a>\
+<figcaption>\7</figcaption></figure>#
+s#\(\n\|^\)[[:space:]]*[Ii][Mm][Aa][Gg][Ee][[:space:]]*:[[:space:]]*<\{0,1\}:/\(/[a-zA-Z0-9/%?+&=\#_.-]\+\)>\{0,1\}[[:space:]]*\
+\(\(\\\n\|[^\n]\)*\)\
+\(.*\)\(\n\|\)#<figure>\
+<a href="\2"> <img src="\2" \3> </a>\
+<figcaption>\5</figcaption></figure>#
 
 # NOTE: To escape a link, it should be like `https\://an/escaped/link`
-# (Link caption) https://path/to/a/link
-# (Link caption) <https://path/to/a/link>
 # https://path/to/a/link (Link caption)
 # <https://path/to/a/link> (Link caption)
-s#\(<\|\)\([[:alnum:]]\+\)\(://[a-zA-Z0-9/%?+&=\#_\.-]\+\)\(>\|\)[[:space:]]*(\([^)\n]*\))#<a href="\2\\\3">\5</a>#g;
-s#(\([^)\n]*\))[[:space:]]*\(<\|\)\([[:alnum:]]\+\)\(://[a-zA-Z0-9/%?+&=\#_\.-]\+\)\(>\|\)#<a href="\3\\\4">\1</a>#g;
+# (Link caption) https://path/to/a/link
+# (Link caption) <https://path/to/a/link>
+s#\(<\|\)\([[:alnum:]]\+\)\(://[a-zA-Z0-9/%?+&=\#_.-]\+\)\(>\|\)[[:space:]]*(\(\(\\)\|[^)\n]\)*\))#<a href="\2\\\3">\5</a>#g;
+s#(\(\(\\)\|[^)\n]\)*\))[[:space:]]*\(<\|\)\([[:alnum:]]\+\)\(://[a-zA-Z0-9/%?+&=\#_.-]\+\)\(>\|\)#<a href="\4\\\5">\1</a>#g;
 
 # https://path/to/a/link
 # <https://path/to/a/link>
-s#\(<\|\)\([[:alnum:]]\+\)\(://[a-zA-Z0-9/%?+&=\#_\.-]\+\)\(>\|\)#<a href="\2\\\3">\2\\\3</a>#g;
+s#\(<\|\)\([[:alnum:]]\+\)\(://[a-zA-Z0-9/%?+&=\#_.-]\+\)\(>\|\)#<a href="\2\\\3">\2\\\3</a>#g;
 
 # NOTE: To escape an email link, it should be like `mailto\:me@mywebsite.org`
-# (Email caption) mailto:me@mywebsite.org
-#  (Email caption)<mailto:me@mywebsite.org>
 # mailto:me@mywebsite.org (Email caption)
 # <mailto:me@mywebsite.org> (Email caption)
-s#\(<\|\)mailto\(:[a-zA-Z0-9/%?+&=\#_\.-]*\(@\|\)[a-zA-Z0-9/%?+&=\#_\.-]\+\)\(>\|\)[[:space:]]*(\(\(\\)\|[^)]\)*\))#<a href="mailto\\\2">\5</a>#g;
-s#(\(\(\\)\|[^)]\)*\))[[:space:]]*\(<\|\)mailto\(:[a-zA-Z0-9/%?+&=\#_\.-]*\(@\|\)[a-zA-Z0-9/%?+&=\#_\.-]\+\)\(>\|\)#<a href="mailto\\\3">\1</a>#g;
+# (Email caption) mailto:me@mywebsite.org
+#  (Email caption)<mailto:me@mywebsite.org>
+s#\(<\|\)mailto\(:[a-zA-Z0-9/%?+&=\#_.-]*\(@\|\)[a-zA-Z0-9/%?+&=\#_.-]\+\)\(>\|\)[[:space:]]*(\(\(\\)\|[^)]\)*\))#<a href="mailto\\\2">\5</a>#g;
+s#(\(\(\\)\|[^)]\)*\))[[:space:]]*\(<\|\)mailto\(:[a-zA-Z0-9/%?+&=\#_.-]*\(@\|\)[a-zA-Z0-9/%?+&=\#_.-]\+\)\(>\|\)#<a href="mailto\\\4">\1</a>#g;
 
 # mailto:me@mywebsite.org
 # <mailto:me@mywebsite.org>
-s#\(<\|\)mailto:\([a-zA-Z0-9/%?+&=\#_\.-]*\(@\|\)[a-zA-Z0-9/%?+&=\#_\.-]\+\)\(>\|\)#<a href="mailto:\2">\2</a>#g;
+s#\(<\|\)mailto:\([a-zA-Z0-9/%?+&=\#_.-]*\(@\|\)[a-zA-Z0-9/%?+&=\#_.-]\+\)\(>\|\)#<a href="mailto:\2">\2</a>#g;
 
 # NOTE: To escape a local link, it should be like `\://path/to/a/local/link`
-# (Link caption) ://path/to/a/local/link
-# (Link caption) <://path/to/a/local/link>
 # ://path/to/a/local/link (Link caption)
 # <://path/to/a/local/link> (Link caption)
-s#(\(\(\\)\|[^)]\)*\))[[:space:]]*\([^\\]\|^\)\(<\|\):/\(/[a-zA-Z0-9/%?+&=\#_\.-]\+\)\(>\|\)#\1<a href="\3">\5</a>#g;
-s#\([^\\]\|^\)\(<\|\):/\(/[a-zA-Z0-9/%?+&=\#_\.-]\+\)\(>\|\)[[:space:]]*(\(\(\\)\|[^)]\)*\))#\1<a href="\3">\5</a>#g;
+# (Link caption) ://path/to/a/local/link
+# (Link caption) <://path/to/a/local/link>
+s#\([^\\]\|^\)\(<\|\):/\(/[a-zA-Z0-9/%?+&=\#_.-]\+\)\(>\|\)[[:space:]]*(\(\(\\)\|[^)]\)*\))#\1<a href="\3">\5</a>#g;
+s#(\(\(\\)\|[^)]\)*\))[[:space:]]*\(<\|\):/\(/[a-zA-Z0-9/%?+&=\#_.-]\+\)\(>\|\)#<a href="\4">\1</a>#g;
 
 # ://path/to/a/local/link
 # <://path/to/a/local/link>
-s#\([^\\]\|^\)\(<\|\)://\([a-zA-Z0-9/%?+&=\#_\.-]\+\)\(>\|\)#\1<a href="/\3">\3</a>#g;
+s#\([^\\]\|^\)\(<\|\)://\([a-zA-Z0-9/%?+&=\#_.-]\+\)\(>\|\)#\1<a href="/\3">\3</a>#g;
 
 # Headers
-/^<h[1-6]>/{ s/\\\(.\)/\1/g; p; s/.*//; x; d;}
-
-# EDGE CASE: No empty line before a header.
-/\n<h[1-6]>[^\n]*<\/h[1-6]>$/{ s/^/<p>/; s/\\\(.\)/\1/g; p; s/.*//; x; d;}
+/\(\n\|^\)<h[1-6]>/{ s/\\\(.\)/\1/g; p; s/.*//; x; d;}
 
 # Blockquote
 /^<blockquote>/{ s/\\\(.\)/\1/g; p; s/.*//; x; d;}

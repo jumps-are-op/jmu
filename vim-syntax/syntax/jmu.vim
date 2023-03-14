@@ -4,7 +4,6 @@ unlet! b:current_syntax
 syn case ignore
 syn spell toplevel
 
-syn region jmuCaption start='(' end=')'
 syn match jmuNdash '---'
 syn match jmuEmoji ':[[:alnum:]_-]\+:'
 syn region jmuCodeBlock start='^```[[:alnum:]]*$' end='^```$'
@@ -17,24 +16,45 @@ syn region jmuCodeInline start='`' end='`'
 syn region jmuStrikethrough start='[-~][-~]' end='[-~][-~]'
 
 syn cluster jmuHAttrs contains=jmuHItalic,jmuHBold,jmuHUnderline,jmuHStrikethrough,jmuHCodeInline
-syn region jmuHItalic start='\*[^*]' end='\*' contained
+syn region jmuHItalic start='\*' end='\*' contained
 syn region jmuHBold start='\*\*' end='\*\*' contained
 syn region jmuHUnderline start='_' end='_' contained
 syn region jmuHStrikethrough start='[-~][-~]' end='[-~][-~]' contained
 syn region jmuHCodeInline start='`' end='`' contained
 
-syn region jmuH1 start='^=[^=]' skip='\n=[^=]' end='$' contains=@jmuHAttrs
-syn region jmuH2 start='^==[^=]' skip='\n==[^=]' end='$' contains=@jmuHAttrs
-syn region jmuH3 start='^===[^=]' skip='\n===[^=]' end='$' contains=@jmuHAttrs
-syn region jmuH4 start='^====[^=]' skip='\n====[^=]' end='$' contains=@jmuHAttrs
-syn region jmuH5 start='^=====[^=]' skip='\n=====[^=]' end='$' contains=@jmuHAttrs
-syn region jmuH6 start='^======[^=]' skip='\n======[^=]' end='$' contains=@jmuHAttrs
+syn region jmuH1 start='^=[^=]' skip='\n=[^=]' end='$' contains=@jmuHAttrs,jmuHLocalLink,jmuHLink
+syn region jmuH2 start='^==[^=]' skip='\n==[^=]' end='$' contains=@jmuHAttrs,jmuHLocalLink,jmuHLink
+syn region jmuH3 start='^===[^=]' skip='\n===[^=]' end='$' contains=@jmuHAttrs,jmuHLocalLink,jmuHLink
+syn region jmuH4 start='^====[^=]' skip='\n====[^=]' end='$' contains=@jmuHAttrs,jmuHLocalLink,jmuHLink
+syn region jmuH5 start='^=====[^=]' skip='\n=====[^=]' end='$' contains=@jmuHAttrs,jmuHLocalLink,jmuHLink
+syn region jmuH6 start='^======[^=]' skip='\n======[^=]' end='$' contains=@jmuHAttrs,jmuHLocalLink,jmuHLink
 
 syn match jmuEmbed '^>\+[[:space:]]*$'
 
-syn match jmuLocalLink '\(<\|\)://[a-zA-Z0-9/%?+&=\#_\.-]\+\(>\|\)'
-syn match jmuLink '\(<\|\)[[:alnum:]]\+://[a-zA-Z0-9/%?+&=\#_\.-]\+\(>\|\)'
-syn match jmuMailtoLink '\(<\|\)mailto:[a-zA-Z0-9@/%?+&=\#_\.-]\+\(>\|\)'
+syn match jmuImage '^[[:space:]]*IMAGE[[:space:]]*:[[:space:]]*.*\n.*$' contains=jmuHLocalLink,jmuHLink,jmuImageSize,htmlArg,htmlString,htmlValue
+syn match jmuImageSize '[0-9]\+[*x ][0-9]\+'
+
+syn match jmuLocalLink '\(<\|\)://[a-zA-Z0-9/%?+&=\#_.-]\+\(>\|\)'
+syn match jmuLink '\(<\|\)[[:alnum:]]\+://[a-zA-Z0-9/%?+&=\#_.-]\+\(>\|\)'
+syn match jmuMailtoLink '\(<\|\)mailto:[a-zA-Z0-9@/%?+&=\#_.-]\+\(>\|\)'
+syn match jmuLocalLinkCaption '(.*)[[:space:]]*\(<\|\)://[a-zA-Z0-9/%?+&=\#_.-]\+\(>\|\)' contains=jmuCaption
+syn match jmuLocalLinkCaption '\(<\|\)://[a-zA-Z0-9/%?+&=\#_.-]\+\(>\|\)[[:space:]]*(.*)' contains=jmuCaption
+syn match jmuLinkCaption '(.*)[[:space:]]*\(<\|\)[[:alnum:]]\+://[a-zA-Z0-9/%?+&=\#_.-]\+\(>\|\)' contains=jmuCaption
+syn match jmuLinkCaption '\(<\|\)[[:alnum:]]\+://[a-zA-Z0-9/%?+&=\#_.-]\+\(>\|\)[[:space:]]*(.*)' contains=jmuCaption
+syn match jmuMailtoLinkCaption '(.*)[[:space:]]*\(<\|\)mailto:[a-zA-Z0-9@/%?+&=\#_.-]\+\(>\|\)' contains=jmuCaption
+syn match jmuMailtoLinkCaption '\(<\|\)mailto:[a-zA-Z0-9@/%?+&=\#_.-]\+\(>\|\)[[:space:]]*(.*)' contains=jmuCaption
+
+syn match jmuHLocalLink '\(<\|\)://[a-zA-Z0-9/%?+&=\#_.-]\+\(>\|\)' contained
+syn match jmuHLink '\(<\|\)[[:alnum:]]\+://[a-zA-Z0-9/%?+&=\#_.-]\+\(>\|\)' contained
+syn match jmuHMailtoLink '\(<\|\)mailto:[a-zA-Z0-9@/%?+&=\#_.-]\+\(>\|\)' contained
+syn match jmuHLocalLinkCaption '(.*)[[:space:]]*\(<\|\)://[a-zA-Z0-9/%?+&=\#_.-]\+\(>\|\)' contained contains=jmuCaption
+syn match jmuHLocalLinkCaption '\(<\|\)://[a-zA-Z0-9/%?+&=\#_.-]\+\(>\|\)[[:space:]]*(.*)' contained contains=jmuCaption
+syn match jmuHLinkCaption '(.*)[[:space:]]*\(<\|\)[[:alnum:]]\+://[a-zA-Z0-9/%?+&=\#_.-]\+\(>\|\)' contained contains=jmuCaption
+syn match jmuHLinkCaption '\(<\|\)[[:alnum:]]\+://[a-zA-Z0-9/%?+&=\#_.-]\+\(>\|\)[[:space:]]*(.*)' contained contains=jmuCaption
+syn match jmuHMailtoLinkCaption '(.*)[[:space:]]*\(<\|\)mailto:[a-zA-Z0-9@/%?+&=\#_.-]\+\(>\|\)' contained contains=jmuCaption
+syn match jmuHMailtoLinkCaption '\(<\|\)mailto:[a-zA-Z0-9@/%?+&=\#_.-]\+\(>\|\)[[:space:]]*(.*)' contained contains=jmuCaption
+
+syn region jmuCaption start='[[:space:]]*(' end=')[[:space:]]*' contained contains=@jmuHAttrs
 
 syn match jmuHr '^[=-][=-][=-][=-]*$'
 
@@ -82,10 +102,22 @@ hi def link jmuH6 Title
 
 hi def link jmuEmbed htmlSpecialChar
 
+hi def link jmuImage htmlSpecialChar
+hi def link jmuImageSize htmlString
+
 hi def link jmuCaption htmlString
-hi def link jmuLink htmlLink
-hi def link jmuMailtoLink htmlLink
 hi def link jmuLocalLink htmlLink
+hi def link jmuLocalLinkCaption htmlLink
+hi def link jmuLink htmlLink
+hi def link jmuLinkCaption htmlLink
+hi def link jmuMailtoLink htmlLink
+hi def link jmuMailtoLinkCaption htmlLink
+hi def link jmuHLocalLink htmlLink
+hi def link jmuHLocalLinkCaption htmlLink
+hi def link jmuHLink htmlLink
+hi def link jmuHLinkCaption htmlLink
+hi def link jmuHMailtoLink htmlLink
+hi def link jmuHMailtoLinkCaption htmlLink
 
 hi def link jmuHr htmlSpecialChar
 
