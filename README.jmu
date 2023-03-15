@@ -27,3 +27,8 @@ Just thinking out of the box,
 (sed) https://en.wikipedia.org/wiki/Sed is a POSIX-compliant tool,
 all of its existence is just to copy/paste text and manipulating text,
 and it exists on almost all UNIX™-like systems, so why not?
+
+== LICENSE
+Any code here (either shell/sed/vim code) is under GPL version 3.
+Any design/creative work is licensed under the public domain
+or the CC0 license, whichever is more permissive.
