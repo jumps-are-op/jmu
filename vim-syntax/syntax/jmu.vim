@@ -4,7 +4,7 @@ unlet! b:current_syntax
 syn case ignore
 syn spell toplevel
 
-syn match jmuNdash '---'
+syn keyword jmuNdash ---
 syn match jmuEmoji ':[[:alnum:]_-]\+:'
 syn region jmuCodeBlock start='^```[[:alnum:]]*$' end='^```$'
 
