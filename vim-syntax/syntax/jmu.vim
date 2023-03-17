@@ -31,8 +31,9 @@ syn region jmuH6 start='^======[^=]' skip='\n======[^=]' end='$' contains=@jmuHA
 
 syn match jmuEmbed '^>\+[[:space:]]*$'
 
-syn match jmuImage '^[[:space:]]*IMAGE[[:space:]]*:[[:space:]]*.*\n.*$' contains=jmuHLocalLink,jmuHLink,jmuImageSize,htmlArg,htmlString,htmlValue
-syn match jmuImageSize '[0-9]\+[*x ][0-9]\+'
+syn match jmuImage '^[[:space:]]*IMAGE[[:space:]]*:[[:space:]]*.*$' contains=jmuHLocalLink,jmuHLink,jmuImageLocalLink,jmuImageSize,htmlArg,htmlString,htmlValue
+syn match jmuImageSize '[0-9]\+[*x ][0-9]\+' contained
+syn match jmuImageLocalLink '/[^[:space:]]*' contained
 
 syn match jmuLocalLink '\(<\|\)://[a-zA-Z0-9/%?+&=\#_.-]\+\(>\|\)'
 syn match jmuLink '\(<\|\)[[:alnum:]]\+://[a-zA-Z0-9/%?+&=\#_.-]\+\(>\|\)'
@@ -104,6 +105,7 @@ hi def link jmuEmbed htmlSpecialChar
 
 hi def link jmuImage htmlSpecialChar
 hi def link jmuImageSize htmlString
+hi def link jmuImageLocalLink htmlLink
 
 hi def link jmuCaption htmlString
 hi def link jmuLocalLink htmlLink

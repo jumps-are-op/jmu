@@ -17,27 +17,33 @@ testjmu(){
 }
 
 # <h1>Basic HTML is support</h1>.
-testjmu 3<<-EOF 4<<-EOF
+exec 3<<TEST
 <h1>Basic HTML is support</h1>.
-EOF
+TEST
+exec 4<<ANS
 <h1>Basic HTML is support</h1>.
-EOF
+ANS
+testjmu
 
 # # Any line start with a # is a comment and will be ignored.
-testjmu 3<<-EOF 4<<-EOF
+exec 3<<TEST
 # Any line start with a # is a comment and will be ignored.
-EOF
-EOF
+TEST
+exec 4<<ANS
+ANS
+testjmu
 
 # Lines grouped together
 # will be merged.
-testjmu 3<<-EOF 4<<-EOF
+exec 3<<TEST
 Lines grouped together
 will be merged.
-EOF
+TEST
+exec 4<<ANS
 <p>Lines grouped together
 will be merged.</p>
-EOF
+ANS
+testjmu
 
 # Lines ending with a . (period) won't be merged together.
 # Lines ending with a "  " (two spaces) will add a newline at the end  
@@ -62,7 +68,7 @@ EOF
 # ~sub~ script
 # H~2~O
 # A `code` text
-testjmu 3<<-EOF 4<<-EOF
+exec 3<<TEST
 *Italic text*
 **BOLD text**
 ~~Text with stroke~~
@@ -77,7 +83,8 @@ H=2=O
 ~sub~ script
 H~2~O
 A \`code\` text
-EOF
+TEST
+exec 4<<ANS
 <p><i>Italic text</i>
 <b>BOLD text</b>
 <del>Text with stroke</del>
@@ -86,12 +93,13 @@ EOF
 <ins>Text with an underline</ins>
 <sup>super</sup> script
 X<sup>2</sup>
-<sub>sub</sub> script
+ <sub>sub</sub> script
 H<sub>2</sub>O
 <sub>sub</sub> script
 H<sub>2</sub>O
 A <code>code</code> text</p>
-EOF
+ANS
+testjmu
 
 # >
 #  embedded text
@@ -99,7 +107,7 @@ EOF
 #   *embedded* **text** ~with~ _attributes_
 # >>
 # >
-testjmu 3<<-EOF 4<<-EOF
+exec 3<<TEST
 >
  embedded text
  *embedded* **text** ~with~ _attributes_
@@ -108,96 +116,163 @@ testjmu 3<<-EOF 4<<-EOF
   double *embedded* **text** ~with~ _attributes_
 >>
 >
-EOF
-<blockquote>
-<p>embedded text
-<i>embedded</i> <b>text</b> <sub>with</sub> <ins>attributes</ins>
-<blockquote>
-<p>double embedded text
-double <i>embedded</i> <b>text</b> <sub>with</sub> <ins>attributes</ins></p>
-</blockquote></p>
-</blockquote>
-EOF
+TEST
+exec 4<<ANS
+<blockquote><p>
+ embedded text
+ <i>embedded</i> <b>text</b> <sub>with</sub> <ins>attributes</ins>
+<blockquote><p>
+  double embedded text
+  double <i>embedded</i> <b>text</b> <sub>with</sub> <ins>attributes</ins>
+</p></blockquote>
+</p></blockquote>
+ANS
+testjmu
 
-testjmu 3<<-EOF 4<<-EOF
+# = Header 1
+# == Header 2
+# === Header 3
+# ==== Header 4
+# ===== Header 5
+# ====== Header 6
+exec 3<<TEST
 = Header 1
 == Header 2
 === Header 3
 ==== Header 4
 ===== Header 5
 ====== Header 6
+Paragraph
 =Header 1
+Paragraph
 ==Header 2
+Paragraph
 ===Header 3
+Paragraph
 ====Header 4
+Paragraph
 =====Header 5
+Paragraph
 ======Header 6
-EOF
+TEST
+exec 4<<ANS
 <h1>Header 1</h1>
 <h2>Header 2</h2>
 <h3>Header 3</h3>
 <h4>Header 4</h4>
 <h5>Header 5</h5>
 <h6>Header 6</h6>
+<p>Paragraph</p>
 <h1>Header 1</h1>
+<p>Paragraph</p>
 <h2>Header 2</h2>
+<p>Paragraph</p>
 <h3>Header 3</h3>
+<p>Paragraph</p>
 <h4>Header 4</h4>
+<p>Paragraph</p>
 <h5>Header 5</h5>
+<p>Paragraph</p>
 <h6>Header 6</h6>
-EOF
+ANS
+testjmu
 
-# IMAGE: https://path/to/an/image.png
-# [HTML ATTRIBUTES]
+# IMAGE: https://path/to/an/image.png [HTML ATTRIBUTES]
+# IMAGE: https://path/to/an/image.png WIDTH[*|X|x| ]HEIGHT [HTML ATTRIBUTES]
+# IMAGE: [:/]/path/to/a/local/image.png [HTML ATTRIBUTES]
+# IMAGE: [:/]/path/to/a/local/image.png WIDTH[*|X|x| ]HEIGHT [HTML ATTRIBUTES]
 # Image caption until the end of the paragraph.
-testjmu 3<<-EOF 4<<-EOF
+exec 3<<TEST
+IMAGE: https://path/to/an/image.png attr="value"
+caption.
+IMAGE: https://path/to/an/image.png 10x20 attr="value"
+caption.
+IMAGE: ://path/to/a/local/image.png attr="value"
+caption.
+IMAGE: ://path/to/a/local/image.png 10x20 attr="value"
+caption.
+IMAGE: /path/to/a/local/image.png attr="value"
+caption.
+IMAGE: /path/to/a/local/image.png 10x20 attr="value"
+caption.
 IMAGE: https://path/to/an/image.png
-attr="value"
 caption.
-EOF
-<p><figure>
-<a href="https://path/to/an/image.png"> <img src="https://path/to/an/image.png" attr="value"> </a>
-<figcaption>caption.</figcaption></figure></p>
-EOF
-# IMAGE: https://path/to/an/image.png WIDTH[*|X|x| ]HEIGHT
-# [HTML ATTRIBUTES]
-# Image caption until the end of the paragraph.
-testjmu 3<<-EOF 4<<-EOF
 IMAGE: https://path/to/an/image.png 10x20
-attr="value"
 caption.
-EOF
-<p><figure>
-<a href="https://path/to/an/image.png"> <img src="https://path/to/an/image.png" width="10" height="20" attr="value"> </a>
-<figcaption>caption.</figcaption></figure></p>
-EOF
-
-# IMAGE: ://path/to/a/local/image.png
-# [HTML ATTRIBUTES]
-# Image caption until the end of the paragraph.
-testjmu 3<<-EOF 4<<-EOF
 IMAGE: ://path/to/a/local/image.png
-attr="value"
 caption.
-EOF
-<p><figure>
-<a href="/path/to/a/local/image.png"> <img src="/path/to/a/local/image.png" attr="value"> </a>
-<figcaption>caption.</figcaption></figure></p>
-EOF
-# IMAGE: ://path/to/a/local/image.png WIDTH[*|X|x| ]HEIGHT
-# [HTML ATTRIBUTES]
-# Image caption until the end of the paragraph.
-testjmu 3<<-EOF 4<<-EOF
 IMAGE: ://path/to/a/local/image.png 10x20
-attr="value"
 caption.
-EOF
-<p><figure>
-<a href="/path/to/a/local/image.png"> <img src="/path/to/a/local/image.png" width="10" height="20" attr="value"> </a>
-<figcaption>caption.</figcaption></figure></p>
-EOF
+IMAGE: /path/to/a/local/image.png
+caption.
+IMAGE: /path/to/a/local/image.png 10x20
+caption.
+TEST
+exec 4<<ANS
+<p><figure><a href="https://path/to/an/image.png">
+<img src="https://path/to/an/image.png" attr="value">
+</a><figcaption>
+caption.
+</figcaption></figure></p>
+<p><figure><a href="https://path/to/an/image.png">
+<img src="https://path/to/an/image.png" width="10" height="20" attr="value">
+</a><figcaption>
+caption.
+</figcaption></figure></p>
+<p><figure><a href="/path/to/a/local/image.png">
+<img src="/path/to/a/local/image.png" attr="value">
+</a><figcaption>
+caption.
+</figcaption></figure></p>
+<p><figure><a href="/path/to/a/local/image.png">
+<img src="/path/to/a/local/image.png" width="10" height="20" attr="value">
+</a><figcaption>
+caption.
+</figcaption></figure></p>
+<p><figure><a href="/path/to/a/local/image.png">
+<img src="/path/to/a/local/image.png" attr="value">
+</a><figcaption>
+caption.
+</figcaption></figure></p>
+<p><figure><a href="/path/to/a/local/image.png">
+<img src="/path/to/a/local/image.png" width="10" height="20" attr="value">
+</a><figcaption>
+caption.
+</figcaption></figure></p>
+<p><figure><a href="https://path/to/an/image.png">
+<img src="https://path/to/an/image.png">
+</a><figcaption>
+caption.
+</figcaption></figure></p>
+<p><figure><a href="https://path/to/an/image.png">
+<img src="https://path/to/an/image.png" width="10" height="20">
+</a><figcaption>
+caption.
+</figcaption></figure></p>
+<p><figure><a href="/path/to/a/local/image.png">
+<img src="/path/to/a/local/image.png">
+</a><figcaption>
+caption.
+</figcaption></figure></p>
+<p><figure><a href="/path/to/a/local/image.png">
+<img src="/path/to/a/local/image.png" width="10" height="20">
+</a><figcaption>
+caption.
+</figcaption></figure></p>
+<p><figure><a href="/path/to/a/local/image.png">
+<img src="/path/to/a/local/image.png">
+</a><figcaption>
+caption.
+</figcaption></figure></p>
+<p><figure><a href="/path/to/a/local/image.png">
+<img src="/path/to/a/local/image.png" width="10" height="20">
+</a><figcaption>
+caption.
+</figcaption></figure></p>
+ANS
+testjmu
 
-# NOTE: Link captions can be on another link of a link,
+# NOTE: Link captions can be on another line of a link,
 # NOTE: this is a feature not a bug!
 # NOTE: forward captions have priority over backward captions
 # https://path/to/a/link
@@ -218,7 +293,7 @@ EOF
 # <://path/to/a/local/link> (Link caption)
 # (Link caption) ://path/to/a/local/link
 # (Link caption) <://path/to/a/local/link>
-testjmu 3<<-EOF 4<<-EOF
+exec 3<<TEST
 https://path/to/a/link
 <https://path/to/a/link>
 https://path/to/a/link (Link caption)
@@ -240,7 +315,8 @@ mailto:me@mywebsite.org (My email)
 (Link caption) ://path/to/a/local/link
 --
 (Link caption) <://path/to/a/local/link>
-EOF
+TEST
+exec 4<<ANS
 <p><a href="https://path/to/a/link">https://path/to/a/link</a>
 <a href="https://path/to/a/link">https://path/to/a/link</a>
 <a href="https://path/to/a/link">Link caption</a>
@@ -262,38 +338,42 @@ EOF
 <a href="/path/to/a/local/link">Link caption</a>
 --
 <a href="/path/to/a/local/link">Link caption</a></p>
-EOF
+ANS
+testjmu
 
 # Text before a horizontal rule
 # ---
 # Text after a horizontal rule
-testjmu 3<<-EOF 4<<-EOF
+exec 3<<TEST
 Text before a horizontal rule
 ---
 Text after a horizontal rule
-EOF
+TEST
+exec 4<<ANS
 <p>Text before a horizontal rule
 <hr/>
 Text after a horizontal rule</p>
-EOF
+ANS
+testjmu
 
 # ```sh
 # 	echo "A multi line code text"
 # ```
-testjmu 3<<-EOF 4<<-EOF
-\`\`\`sh
+exec 3<<"TEST"
+```sh
 echo "A multi
 line
 
 code text"
-\`\`\`
-\`\`\`
+```
+```
 echo "A multi
 line
 
 code text"
-\`\`\`
-EOF
+```
+TEST
+exec 4<<ANS
 <pre><code class="language-sh">echo "A multi
 line
 
@@ -303,14 +383,17 @@ code text"
 line
 
 code text"</code></pre>
-EOF
+ANS
+testjmu
 
 # A --- (long dash) character
-testjmu 3<<-EOF 4<<-EOF
+exec 3<<TEST
 A --- (long dash) character
-EOF
+TEST
+exec 4<<ANS
 <p>A &ndash; (long dash) character</p>
-EOF
+ANS
+testjmu
 
 # # TODO
 # NOTE: A note block.

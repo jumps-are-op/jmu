@@ -101,8 +101,7 @@
 #
 # A --- (long dash) character
 #
-# IMAGE: https://path/to/an/image.png [WIDTH[*|X|x| ]HEIGHT]
-# [HTML ATTRIBUTES]
+# IMAGE: https://path/to/an/image.png [WIDTH[*|X|x| ]HEIGHT] [HTML ATTRIBUTES]
 # Image caption until the end of the paragraph.
 #
 # # TODO
@@ -132,18 +131,15 @@ H;
 # the line is empty, branch to `start`.
 x;
 /^```[[:alnum:]]*/!{ x;
-	/^=\(\|=\|==\|===\|====\|=====\)[[:space:]]*[^=]\+$/{ s/.*//; b start;}
+	/^=\{1,6\}[[:space:]]*[^=]\+$/{ s/.*//; b start;}
 	/\([^.]\|^\)\.$/{ s/.*//; b start;}
 	/^$/{ s/.*//; b start;}
 	x;
 }
 x;
 
-# If the line is the last line, branch to `start`.
-$b start;
-
-# Start new cycle.
-b;
+# If the line is the not last line, start new cycle.
+$!b;
 
 # Now we have a "paragraph" of text in the hold space.
 :start;
@@ -162,14 +158,14 @@ s/^\n//;
 # ```CLASS code``` text
 /^```[[:alnum:]]*\n/{
 	# Hold space now have ```, move it to Patern space
-	x; s/.*//; x; s/$/```/
+	x; s/.*//; x; s/$/```/;
 	s#^```\([[:alnum:]]\+\)\n\(.*\)```$#<pre><code class="language-\1">\2\n</code></pre>#g;
 	s#^```\n\(.*\)```$#<pre><code>\1</code></pre>#g;
-	b end
+	b end;
 }
 
 # Delete lines starting with #.
-s/\(\n\|^\)[[:space:]]*#[^\n]*\(\n\|$\)/\2/g;
+s/\(\n\|^\)[[:space:]]*#[^\n]*//g;
 
 # If main text is empty, start new cycle.
 /^$/b;
@@ -204,19 +200,15 @@ s#\(\n\|^\)=====[[:space:]]*\([^=]\+.*\)$#<h5>\2</h5>#;
 s#\(\n\|^\)======[[:space:]]*\([^=]\+.*\)$#<h6>\2</h6>#;
 
 # Only 9 levels are supported
-s#\(\n\|^\)>\{9\}\(\(\n[^>]\{9\}[^\n]*\)*\)\n>\{9\}\(\n\|$\)#\1<blockquote>\n<p>\2</p>\n</blockquote>\4#g;
-s#\(\n\|^\)>\{8\}\(\(\n[^>]\{8\}[^\n]*\)*\)\n>\{8\}\(\n\|$\)#\1<blockquote>\n<p>\2</p>\n</blockquote>\4#g;
-s#\(\n\|^\)>\{7\}\(\(\n[^>]\{7\}[^\n]*\)*\)\n>\{7\}\(\n\|$\)#\1<blockquote>\n<p>\2</p>\n</blockquote>\4#g;
-s#\(\n\|^\)>\{6\}\(\(\n[^>]\{6\}[^\n]*\)*\)\n>\{6\}\(\n\|$\)#\1<blockquote>\n<p>\2</p>\n</blockquote>\4#g;
-s#\(\n\|^\)>>>>>\(\(\n[^>]\{5\}[^\n]*\)*\)\n>>>>>\(\n\|$\)#\1<blockquote>\n<p>\2</p>\n</blockquote>\4#g;
-s#\(\n\|^\)>>>>\(\(\n[^>]\{4\}[^\n]*\)*\)\n>>>>\(\n\|$\)#\1<blockquote>\n<p>\2</p>\n</blockquote>\4#g;
-s#\(\n\|^\)>>>\(\(\n[^>]\{3\}[^\n]*\)*\)\n>>>\(\n\|$\)#\1<blockquote>\n<p>\2</p>\n</blockquote>\4#g;
-s#\(\n\|^\)>>\(\(\n[^>]\{2\}[^\n]*\)*\)\n>>\(\n\|$\)#\1<blockquote>\n<p>\2</p>\n</blockquote>\4#g;
-s#\(\n\|^\)>\(\(\n[^>][^\n]*\)*\)\n>\(\n\|$\)#\1<blockquote>\n<p>\2</p>\n</blockquote>\4#g;
-s#<p>\n*[[:space:]]*#<p>#g;
-s#[[:space:]]*\n*</p>#</p>#g;
-s#\n[[:space:]]*#\n#g;
-s#^[[:space:]]*##g;
+s#\(\n\|^\)>\{9\}\(\(\n[^>]\{9\}[^\n]*\)*\)\n>\{9\}\(\n\|$\)#\1<blockquote><p>\2\n</p></blockquote>\4#g;
+s#\(\n\|^\)>\{8\}\(\(\n[^>]\{8\}[^\n]*\)*\)\n>\{8\}\(\n\|$\)#\1<blockquote><p>\2\n</p></blockquote>\4#g;
+s#\(\n\|^\)>\{7\}\(\(\n[^>]\{7\}[^\n]*\)*\)\n>\{7\}\(\n\|$\)#\1<blockquote><p>\2\n</p></blockquote>\4#g;
+s#\(\n\|^\)>\{6\}\(\(\n[^>]\{6\}[^\n]*\)*\)\n>\{6\}\(\n\|$\)#\1<blockquote><p>\2\n</p></blockquote>\4#g;
+s#\(\n\|^\)>>>>>\(\(\n[^>]\{5\}[^\n]*\)*\)\n>>>>>\(\n\|$\)#\1<blockquote><p>\2\n</p></blockquote>\4#g;
+s#\(\n\|^\)>>>>\(\(\n[^>]\{4\}[^\n]*\)*\)\n>>>>\(\n\|$\)#\1<blockquote><p>\2\n</p></blockquote>\4#g;
+s#\(\n\|^\)>>>\(\(\n[^>]\{3\}[^\n]*\)*\)\n>>>\(\n\|$\)#\1<blockquote><p>\2\n</p></blockquote>\4#g;
+s#\(\n\|^\)>>\(\(\n[^>]\{2\}[^\n]*\)*\)\n>>\(\n\|$\)#\1<blockquote><p>\2\n</p></blockquote>\4#g;
+s#\(\n\|^\)>\(\(\n[^>][^\n]*\)*\)\n>\(\n\|$\)#\1<blockquote><p>\2\n</p></blockquote>\4#g;
 
 # **BOLD** text
 s#\([^\\]\|^\)\*\*\(\(\\\*\|[^*]\|\*[^*]\)*\)\*\*#\1<b>\2</b>#g;
@@ -245,33 +237,27 @@ s#\([^\\]\|^\)=\([[:alnum:]]*\)=#\1<sub>\2</sub>#g;
 # A --- long dash
 s#\([^\\]\|^\)---#\1\&ndash;#g;
 
-# IMAGE: https://path/to/an/image.png [WIDTH[*|X|x| ]HEIGHT]
-# [HTML ATTRIBUTES]
+# IMAGE: https://path/to/an/image.png [WIDTH[*|X|x| ]HEIGHT] [HTML ATTRIBUTES]
 # Image caption until the end of the paragraph.
-s#\(\n\|^\)[[:space:]]*[Ii][Mm][Aa][Gg][Ee][[:space:]]*:[[:space:]]*<\{0,1\}\([[:alnum:]]\+\)\(://[a-zA-Z0-9/%?+&=\#_.-]\+\)>\{0,1\}[[:space:]]*\([0-9]\+\)[*Xx ]\([0-9]\+\)\
-\(\(\\\n\|[^\n]\)*\)\
-\(.*\)\(\n\|\)#<figure>\
-<a href="\2\\\3"> <img src="\2\\\3" width="\4" height="\5" \6> </a>\
-<figcaption>\8</figcaption></figure>#
-s#\(\n\|^\)[[:space:]]*[Ii][Mm][Aa][Gg][Ee][[:space:]]*:[[:space:]]*<\{0,1\}\([[:alnum:]]\+\)\(://[a-zA-Z0-9/%?+&=\#_.-]\+\)>\{0,1\}[[:space:]]*\
-\(\(\\\n\|[^\n]\)*\)\
-\(.*\)\(\n\|\)#<figure>\
-<a href="\2\\\3"> <img src="\2\\\3" \4> </a>\
-<figcaption>\6</figcaption></figure>#
+s#\(\n\|^\)[[:space:]]*[Ii][Mm][Aa][Gg][Ee][[:space:]]*:[[:space:]]*<\{0,1\}\([[:alnum:]]\+\)\(://[a-zA-Z0-9/%?+&=\#_.-]\+\)>\{0,1\}[[:space:]]*\([0-9]\+\)[*Xx ]\([0-9]\+\)\([[:space:]]\+.*\|\)\
+\(.*\)#<figure><a href="\2\\\3">\
+<img src="\2\\\3" width="\4" height="\5"\6>\
+</a><figcaption>\n\7\n</figcaption></figure>#;
+s#\(\n\|^\)[[:space:]]*[Ii][Mm][Aa][Gg][Ee][[:space:]]*:[[:space:]]*<\{0,1\}\([[:alnum:]]\+\)\(://[a-zA-Z0-9/%?+&=\#_.-]\+\)>\{0,1\}[[:space:]]*\([[:space:]]\+.*\|\)\
+\(.*\)#<figure><a href="\2\\\3">\
+<img src="\2\\\3"\4>\
+</a><figcaption>\n\5\n</figcaption></figure>#;
 
-# IMAGE: ://path/to/a/local/image.png [WIDTH[*|X|x| ]HEIGHT]
-# [HTML ATTRIBUTES]
+# IMAGE: [:/]/path/to/a/local/image.png [WIDTH[*|X|x| ]HEIGHT] [HTML ATTRIBUTES]
 # Image caption until the end of the paragraph.
-s#\(\n\|^\)[[:space:]]*[Ii][Mm][Aa][Gg][Ee][[:space:]]*:[[:space:]]*<\{0,1\}:/\(/[a-zA-Z0-9/%?+&=\#_.-]\+\)>\{0,1\}[[:space:]]*\([0-9]\+\)[*Xx ]\([0-9]\+\)\
-\(\(\\\n\|[^\n]\)*\)\
-\(.*\)\(\n\|\)#<figure>\
-<a href="\2"> <img src="\2" width="\3" height="\4" \5> </a>\
-<figcaption>\7</figcaption></figure>#
-s#\(\n\|^\)[[:space:]]*[Ii][Mm][Aa][Gg][Ee][[:space:]]*:[[:space:]]*<\{0,1\}:/\(/[a-zA-Z0-9/%?+&=\#_.-]\+\)>\{0,1\}[[:space:]]*\
-\(\(\\\n\|[^\n]\)*\)\
-\(.*\)\(\n\|\)#<figure>\
-<a href="\2"> <img src="\2" \3> </a>\
-<figcaption>\5</figcaption></figure>#
+s#\(\n\|^\)[[:space:]]*[Ii][Mm][Aa][Gg][Ee][[:space:]]*:[[:space:]]*<\{0,1\}\(:/\|\)\(/[a-zA-Z0-9/%?+&=\#_.-]\+\)>\{0,1\}[[:space:]]*\([0-9]\+\)[*Xx ]\([0-9]\+\)\([[:space:]]\+.*\|\)\
+\(.*\)#<figure><a href="\3">\
+<img src="\3" width="\4" height="\5"\6>\
+</a><figcaption>\n\7\n</figcaption></figure>#;
+s#\(\n\|^\)[[:space:]]*[Ii][Mm][Aa][Gg][Ee][[:space:]]*:[[:space:]]*<\{0,1\}\(:/\|\)\(/[a-zA-Z0-9/%?+&=\#_.-]\+\)>\{0,1\}[[:space:]]*\([[:space:]]\+.*\|\)\
+\(.*\)#<figure><a href="\3">\
+<img src="\3"\4>\
+</a><figcaption>\n\5\n</figcaption></figure>#;
 
 # NOTE: To escape a link, it should be like `https\://an/escaped/link`
 # https://path/to/a/link (Link caption)
@@ -310,7 +296,7 @@ s#(\(\(\\)\|[^)]\)*\))[[:space:]]*\(<\|\):/\(/[a-zA-Z0-9/%?+&=\#_.-]\+\)\(>\|\)#
 s#\([^\\]\|^\)\(<\|\)://\([a-zA-Z0-9/%?+&=\#_.-]\+\)\(>\|\)#\1<a href="/\3">\3</a>#g;
 
 # Headers
-/\(\n\|^\)<h[1-6]>/{ s/\\\(.\)/\1/g; p; s/.*//; x; d;}
+/^<h[1-6]>/{ s/\\\(.\)/\1/g; p; s/.*//; x; d;}
 
 # Blockquote
 /^<blockquote>/{ s/\\\(.\)/\1/g; p; s/.*//; x; d;}
@@ -318,6 +304,9 @@ s#\([^\\]\|^\)\(<\|\)://\([a-zA-Z0-9/%?+&=\#_.-]\+\)\(>\|\)#\1<a href="/\3">\3</
 # Paragraphs
 s#^#<p>#;
 s#[[:space:]]*$#</p>#;
+
+# Headers should be outside paragraphs
+s#\(<h[0-6]>.*</h[0-6]>\)</p>$#</p>\n\1#;
 
 # Escape
 s/\\\(.\)/\1/g;
