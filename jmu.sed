@@ -264,12 +264,12 @@ s#\(\n\|^\)[[:space:]]*[Ii][Mm][Aa][Gg][Ee][[:space:]]*:[[:space:]]*<\{0,1\}\(:/
 # <https://path/to/a/link> (Link caption)
 # (Link caption) https://path/to/a/link
 # (Link caption) <https://path/to/a/link>
-s#\(<\|\)\([[:alnum:]]\+\)\(://[a-zA-Z0-9/%?+&=\#_.-]\+\)\(>\|\)[[:space:]]*(\(\(\\)\|[^)\n]\)*\))#<a href="\2\\\3">\5</a>#g;
+s#\(<\|\)\([[:alnum:]]\+\)\(://[a-zA-Z0-9/%?@+&=\#_.-]\+\)\(>\|\)[[:space:]]*(\(\(\\)\|[^)\n]\)*\))#<a href="\2\\\3">\5</a>#g;
 s#(\(\(\\)\|[^)\n]\)*\))[[:space:]]*\(<\|\)\([[:alnum:]]\+\)\(://[a-zA-Z0-9/%?+&=\#_.-]\+\)\(>\|\)#<a href="\4\\\5">\1</a>#g;
 
 # https://path/to/a/link
 # <https://path/to/a/link>
-s#\(<\|\)\([[:alnum:]]\+\)\(://[a-zA-Z0-9/%?+&=\#_.-]\+\)\(>\|\)#<a href="\2\\\3">\2\\\3</a>#g;
+s#\(<\|\)\([[:alnum:]]\+\)\(://[a-zA-Z0-9/%?@+&=\#_.-]\+\)\(>\|\)#<a href="\2\\\3">\2\\\3</a>#g;
 
 # NOTE: To escape an email link, it should be like `mailto\:me@mywebsite.org`
 # mailto:me@mywebsite.org (Email caption)
@@ -289,11 +289,11 @@ s#\(<\|\)mailto:\([a-zA-Z0-9/%?+&=\#_.-]*\(@\|\)[a-zA-Z0-9/%?+&=\#_.-]\+\)\(>\|\
 # (Link caption) ://path/to/a/local/link
 # (Link caption) <://path/to/a/local/link>
 s#\([^\\]\|^\)\(<\|\):/\(/[a-zA-Z0-9/%?+&=\#_.-]\+\)\(>\|\)[[:space:]]*(\(\(\\)\|[^)]\)*\))#\1<a href="\3">\5</a>#g;
-s#(\(\(\\)\|[^)]\)*\))[[:space:]]*\(<\|\):/\(/[a-zA-Z0-9/%?+&=\#_.-]\+\)\(>\|\)#<a href="\4">\1</a>#g;
+s#(\(\(\\)\|[^)]\)*\))[[:space:]]*\(<\|\):/\(/[a-zA-Z0-9/%?@+&=\#_.-]\+\)\(>\|\)#<a href="\4">\1</a>#g;
 
 # ://path/to/a/local/link
 # <://path/to/a/local/link>
-s#\([^\\]\|^\)\(<\|\)://\([a-zA-Z0-9/%?+&=\#_.-]\+\)\(>\|\)#\1<a href="/\3">\3</a>#g;
+s#\([^\\]\|^\)\(<\|\)://\([a-zA-Z0-9/%?@+&=\#_.-]\+\)\(>\|\)#\1<a href="/\3">\3</a>#g;
 
 # Headers
 /^<h[1-6]>/{ s/\\\(.\)/\1/g; p; s/.*//; x; d;}
