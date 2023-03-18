@@ -35,25 +35,25 @@ syn match jmuImage '^[[:space:]]*IMAGE[[:space:]]*:[[:space:]]*.*$' contains=jmu
 syn match jmuImageSize '[0-9]\+[*x ][0-9]\+' contained
 syn match jmuImageLocalLink '/[^[:space:]]*' contained
 
-syn match jmuLocalLink '\(<\|\)://[a-zA-Z0-9/%?+&=\#_.-]\+\(>\|\)'
-syn match jmuLink '\(<\|\)[[:alnum:]]\+://[a-zA-Z0-9/%?+&=\#_.-]\+\(>\|\)'
+syn match jmuLocalLink '\(<\|\)://[a-zA-Z0-9/%?@+&=\#_.-]\+\(>\|\)'
+syn match jmuLink '\(<\|\)[[:alnum:]]\+://[a-zA-Z0-9/%?@+&=\#_.-]\+\(>\|\)'
 syn match jmuMailtoLink '\(<\|\)mailto:[a-zA-Z0-9@/%?+&=\#_.-]\+\(>\|\)'
-syn match jmuLocalLinkCaption '(.*)[[:space:]]*\(<\|\)://[a-zA-Z0-9/%?+&=\#_.-]\+\(>\|\)' contains=jmuCaption
-syn match jmuLocalLinkCaption '\(<\|\)://[a-zA-Z0-9/%?+&=\#_.-]\+\(>\|\)[[:space:]]*(.*)' contains=jmuCaption
-syn match jmuLinkCaption '(.*)[[:space:]]*\(<\|\)[[:alnum:]]\+://[a-zA-Z0-9/%?+&=\#_.-]\+\(>\|\)' contains=jmuCaption
-syn match jmuLinkCaption '\(<\|\)[[:alnum:]]\+://[a-zA-Z0-9/%?+&=\#_.-]\+\(>\|\)[[:space:]]*(.*)' contains=jmuCaption
+syn match jmuLocalLinkCaption '(.*)[[:space:]]*\(<\|\)://[a-zA-Z0-9/%?@+&=\#_.-]\+\(>\|\)' contains=jmuCaption
+syn match jmuLocalLinkCaption '\(<\|\)://[a-zA-Z0-9/%?@+&=\#_.-]\+\(>\|\)[[:space:]]*(.*)' contains=jmuCaption
+syn match jmuLinkCaption '(.*)[[:space:]]*\(<\|\)[[:alnum:]]\+://[a-zA-Z0-9/%?@+&=\#_.-]\+\(>\|\)' contains=jmuCaption
+syn match jmuLinkCaption '\(<\|\)[[:alnum:]]\+://[a-zA-Z0-9/%?@+&=\#_.-]\+\(>\|\)[[:space:]]*(.*)' contains=jmuCaption
 syn match jmuMailtoLinkCaption '(.*)[[:space:]]*\(<\|\)mailto:[a-zA-Z0-9@/%?+&=\#_.-]\+\(>\|\)' contains=jmuCaption
 syn match jmuMailtoLinkCaption '\(<\|\)mailto:[a-zA-Z0-9@/%?+&=\#_.-]\+\(>\|\)[[:space:]]*(.*)' contains=jmuCaption
 
-syn match jmuHLocalLink '\(<\|\)://[a-zA-Z0-9/%?+&=\#_.-]\+\(>\|\)' contained
-syn match jmuHLink '\(<\|\)[[:alnum:]]\+://[a-zA-Z0-9/%?+&=\#_.-]\+\(>\|\)' contained
+syn match jmuHLocalLink '\(<\|\)://[a-zA-Z0-9/%?@+&=\#_.-]\+\(>\|\)' contained
+syn match jmuHLink '\(<\|\)[[:alnum:]]\+://[a-zA-Z0-9/%?@+&=\#_.-]\+\(>\|\)' contained
 syn match jmuHMailtoLink '\(<\|\)mailto:[a-zA-Z0-9@/%?+&=\#_.-]\+\(>\|\)' contained
-syn match jmuHLocalLinkCaption '(.*)[[:space:]]*\(<\|\)://[a-zA-Z0-9/%?+&=\#_.-]\+\(>\|\)' contained contains=jmuCaption
-syn match jmuHLocalLinkCaption '\(<\|\)://[a-zA-Z0-9/%?+&=\#_.-]\+\(>\|\)[[:space:]]*(.*)' contained contains=jmuCaption
-syn match jmuHLinkCaption '(.*)[[:space:]]*\(<\|\)[[:alnum:]]\+://[a-zA-Z0-9/%?+&=\#_.-]\+\(>\|\)' contained contains=jmuCaption
-syn match jmuHLinkCaption '\(<\|\)[[:alnum:]]\+://[a-zA-Z0-9/%?+&=\#_.-]\+\(>\|\)[[:space:]]*(.*)' contained contains=jmuCaption
-syn match jmuHMailtoLinkCaption '(.*)[[:space:]]*\(<\|\)mailto:[a-zA-Z0-9@/%?+&=\#_.-]\+\(>\|\)' contained contains=jmuCaption
-syn match jmuHMailtoLinkCaption '\(<\|\)mailto:[a-zA-Z0-9@/%?+&=\#_.-]\+\(>\|\)[[:space:]]*(.*)' contained contains=jmuCaption
+syn match jmuHLocalLinkCaption '(.*)[[:space:]]*\(<\|\)://[a-zA-Z0-9/%?@+&=\#_.-]\+\(>\|\)' contains=jmuCaption
+syn match jmuHLocalLinkCaption '\(<\|\)://[a-zA-Z0-9/%?@+&=\#_.-]\+\(>\|\)[[:space:]]*(.*)' contains=jmuCaption
+syn match jmuHLinkCaption '(.*)[[:space:]]*\(<\|\)[[:alnum:]]\+://[a-zA-Z0-9/%?@+&=\#_.-]\+\(>\|\)' contains=jmuCaption
+syn match jmuHLinkCaption '\(<\|\)[[:alnum:]]\+://[a-zA-Z0-9/%?@+&=\#_.-]\+\(>\|\)[[:space:]]*(.*)' contains=jmuCaption
+syn match jmuHMailtoLinkCaption '(.*)[[:space:]]*\(<\|\)mailto:[a-zA-Z0-9@/%?+&=\#_.-]\+\(>\|\)' contains=jmuCaption
+syn match jmuHMailtoLinkCaption '\(<\|\)mailto:[a-zA-Z0-9@/%?+&=\#_.-]\+\(>\|\)[[:space:]]*(.*)' contains=jmuCaption
 
 syn region jmuCaption start='[[:space:]]*(' end=')[[:space:]]*' contained contains=@jmuHAttrs
 
