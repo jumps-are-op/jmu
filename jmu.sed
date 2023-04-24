@@ -1,6 +1,6 @@
 #!/bin/sed -nf
 
-# Made by jumps are op
+# Made by Jumps Are Op (jumpsareop@gmail.com)
 # This software is under GPL version 3 and comes with ABSOLUTELY NO WARRANTY
 
 # "All markup languages are overcomplicated and bloated." -- Jumps
@@ -42,7 +42,7 @@
 # _Text with an underline_
 # ^super^ script
 # X^2^
-# # Only works on alpha numeric charters
+# # Only works on alpha numeric characters
 # =sub= script
 # H=2=O
 # ~sub~ script
@@ -115,8 +115,8 @@
 
 # No matter what happen DO NOT ALLOW NON-PRINTABLE CHARACTERS IN HTML.
 s/&/\&amp;/g;
-s/&amp;\(#[0-9]\+\|[a-z]\+\);/\&\1;/g;
-s/[[:space:]]\+<[[:space:]]\+/ \&lt; /g;
+s/&amp;\(#[0-9]\{1,\}\|[a-z]\{1,\}\);/\&\1;/g;
+s/[[:space:]]\{1,\}<[[:space:]]\{1,\}/ \&lt; /g;
 s/[[:cntrl:]]/ /g;
 
 # If the line is a code block start, branch to `start`
@@ -131,7 +131,7 @@ H;
 # the line is empty, branch to `start`.
 x;
 /^```[[:alnum:]]*/!{ x;
-	/^=\{1,6\}[[:space:]]*[^=]\+$/{ s/.*//; b start;}
+	/^=\{1,6\}[[:space:]]*[^=]\{1,\}$/{ s/.*//; b start;}
 	/\([^.]\|^\)\.$/{ s/.*//; b start;}
 	/^$/{ s/.*//; b start;}
 	x;
@@ -159,7 +159,7 @@ s/^\n//;
 /^```[[:alnum:]]*\n/{
 	# Hold space now have ```, move it to Patern space
 	x; s/.*//; x; s/$/```/;
-	s#^```\([[:alnum:]]\+\)\n\(.*\)```$#<pre><code class="language-\1">\2\n</code></pre>#g;
+	s#^```\([[:alnum:]]\{1,\}\)\n\(.*\)```$#<pre><code class="language-\1">\2\n</code></pre>#g;
 	s#^```\n\(.*\)```$#<pre><code>\1</code></pre>#g;
 	b end;
 }
@@ -192,12 +192,12 @@ s#\(\n\|^\)[=-][=-][=-][=-]*\(\n\|$\)#\1<hr/>\2#g;
 s#\([^\\]\|^\)`\(\(\\`\|[^`]\)*\)`#\1<code>\2</code>#g;
 
 # = Header
-s#\(\n\|^\)=[[:space:]]*\([^=]\+.*\)$#<h1>\2</h1>#;
-s#\(\n\|^\)==[[:space:]]*\([^=]\+.*\)$#<h2>\2</h2>#;
-s#\(\n\|^\)===[[:space:]]*\([^=]\+.*\)$#<h3>\2</h3>#;
-s#\(\n\|^\)====[[:space:]]*\([^=]\+.*\)$#<h4>\2</h4>#;
-s#\(\n\|^\)=====[[:space:]]*\([^=]\+.*\)$#<h5>\2</h5>#;
-s#\(\n\|^\)======[[:space:]]*\([^=]\+.*\)$#<h6>\2</h6>#;
+s#\(\n\|^\)=[[:space:]]*\([^=].*\)$#<h1>\2</h1>#;
+s#\(\n\|^\)==[[:space:]]*\([^=].*\)$#<h2>\2</h2>#;
+s#\(\n\|^\)===[[:space:]]*\([^=].*\)$#<h3>\2</h3>#;
+s#\(\n\|^\)====[[:space:]]*\([^=].*\)$#<h4>\2</h4>#;
+s#\(\n\|^\)=====[[:space:]]*\([^=].*\)$#<h5>\2</h5>#;
+s#\(\n\|^\)======[[:space:]]*\([^=].*\)$#<h6>\2</h6>#;
 
 # Only 9 levels are supported
 s#\(\n\|^\)>\{9\}\(\(\n[^>]\{9\}[^\n]*\)*\)\n>\{9\}\(\n\|$\)#\1<blockquote><p>\2\n</p></blockquote>\4#g;
@@ -239,22 +239,21 @@ s#\([^\\]\|^\)---#\1\&ndash;#g;
 
 # IMAGE: https://path/to/an/image.png [WIDTH[*|X|x| ]HEIGHT] [HTML ATTRIBUTES]
 # Image caption until the end of the paragraph.
-s#\(\n\|^\)[[:space:]]*[Ii][Mm][Aa][Gg][Ee][[:space:]]*:[[:space:]]*<\{0,1\}\([[:alnum:]]\+\)\(://[a-zA-Z0-9/%?+&=\#_.-]\+\)>\{0,1\}[[:space:]]*\([0-9]\+\)[*Xx ]\([0-9]\+\)\([[:space:]]\+.*\|\)\
-\(.*\)#<figure><a href="\2\\\3">\
+s#\(\n\|^\)[[:space:]]*[Ii][Mm][Aa][Gg][Ee][[:space:]]*:[[:space:]]*<\{0,1\}\([[:alnum:]]\{1,\}\)\(://[a-zA-Z0-9/%?+&=#_.-]\{1,\}\)>\{0,1\}[[:space:]]*\([0-9]\{1,\}\)[*Xx ]\([0-9]\{1,\}\)\([[:space:]]\{1,\}.*\|\)\n\(.*\)#<figure><a href="\2\\\3">\
 <img src="\2\\\3" width="\4" height="\5"\6>\
 </a><figcaption>\n\7\n</figcaption></figure>#;
-s#\(\n\|^\)[[:space:]]*[Ii][Mm][Aa][Gg][Ee][[:space:]]*:[[:space:]]*<\{0,1\}\([[:alnum:]]\+\)\(://[a-zA-Z0-9/%?+&=\#_.-]\+\)>\{0,1\}[[:space:]]*\([[:space:]]\+.*\|\)\
+s#\(\n\|^\)[[:space:]]*[Ii][Mm][Aa][Gg][Ee][[:space:]]*:[[:space:]]*<\{0,1\}\([[:alnum:]]\{1,\}\)\(://[a-zA-Z0-9/%?+&=#_.-]\{1,\}\)>\{0,1\}[[:space:]]*\([[:space:]]\{1,\}.*\|\)\
 \(.*\)#<figure><a href="\2\\\3">\
 <img src="\2\\\3"\4>\
 </a><figcaption>\n\5\n</figcaption></figure>#;
 
 # IMAGE: [:/]/path/to/a/local/image.png [WIDTH[*|X|x| ]HEIGHT] [HTML ATTRIBUTES]
 # Image caption until the end of the paragraph.
-s#\(\n\|^\)[[:space:]]*[Ii][Mm][Aa][Gg][Ee][[:space:]]*:[[:space:]]*<\{0,1\}\(:/\|\)\(/[a-zA-Z0-9/%?+&=\#_.-]\+\)>\{0,1\}[[:space:]]*\([0-9]\+\)[*Xx ]\([0-9]\+\)\([[:space:]]\+.*\|\)\
+s#\(\n\|^\)[[:space:]]*[Ii][Mm][Aa][Gg][Ee][[:space:]]*:[[:space:]]*<\{0,1\}\(:/\|\)\(/[a-zA-Z0-9/%?+&=#_.-]\{1,\}\)>\{0,1\}[[:space:]]*\([0-9]\{1,\}\)[*Xx ]\([0-9]\{1,\}\)\([[:space:]]\{1,\}.*\|\)\
 \(.*\)#<figure><a href="\3">\
 <img src="\3" width="\4" height="\5"\6>\
 </a><figcaption>\n\7\n</figcaption></figure>#;
-s#\(\n\|^\)[[:space:]]*[Ii][Mm][Aa][Gg][Ee][[:space:]]*:[[:space:]]*<\{0,1\}\(:/\|\)\(/[a-zA-Z0-9/%?+&=\#_.-]\+\)>\{0,1\}[[:space:]]*\([[:space:]]\+.*\|\)\
+s#\(\n\|^\)[[:space:]]*[Ii][Mm][Aa][Gg][Ee][[:space:]]*:[[:space:]]*<\{0,1\}\(:/\|\)\(/[a-zA-Z0-9/%?+&=#_.-]\{1,\}\)>\{0,1\}[[:space:]]*\([[:space:]]\{1,\}.*\|\)\
 \(.*\)#<figure><a href="\3">\
 <img src="\3"\4>\
 </a><figcaption>\n\5\n</figcaption></figure>#;
@@ -264,36 +263,36 @@ s#\(\n\|^\)[[:space:]]*[Ii][Mm][Aa][Gg][Ee][[:space:]]*:[[:space:]]*<\{0,1\}\(:/
 # <https://path/to/a/link> (Link caption)
 # (Link caption) https://path/to/a/link
 # (Link caption) <https://path/to/a/link>
-s#\(<\|\)\([[:alnum:]]\+\)\(://[a-zA-Z0-9/%?@+&=\#_.-]\+\)\(>\|\)[[:space:]]*(\(\(\\)\|[^)\n]\)*\))#<a href="\2\\\3">\5</a>#g;
-s#(\(\(\\)\|[^)\n]\)*\))[[:space:]]*\(<\|\)\([[:alnum:]]\+\)\(://[a-zA-Z0-9/%?@+&=\#_.-]\+\)\(>\|\)#<a href="\4\\\5">\1</a>#g;
+s#\(<\|\)\([[:alnum:]]\{1,\}\)\(://[a-zA-Z0-9/%?@+&=#_.-]\{1,\}\)\(>\|\)[[:space:]]*(\(\(\\)\|[^)\n]\)*\))#<a href="\2\\\3">\5</a>#g;
+s#(\(\(\\)\|[^)\n]\)*\))[[:space:]]*\(<\|\)\([[:alnum:]]\{1,\}\)\(://[a-zA-Z0-9/%?@+&=#_.-]\{1,\}\)\(>\|\)#<a href="\4\\\5">\1</a>#g;
 
 # https://path/to/a/link
 # <https://path/to/a/link>
-s#\(<\|\)\([[:alnum:]]\+\)\(://[a-zA-Z0-9/%?@+&=\#_.-]\+\)\(>\|\)#<a href="\2\\\3">\2\\\3</a>#g;
+s#\(<\|\)\([[:alnum:]]\{1,\}\)\(://[a-zA-Z0-9/%?@+&=#_.-]\{1,\}\)\(>\|\)#<a href="\2\\\3">\2\\\3</a>#g;
 
 # NOTE: To escape an email link, it should be like `mailto\:me@mywebsite.org`
 # mailto:me@mywebsite.org (Email caption)
 # <mailto:me@mywebsite.org> (Email caption)
 # (Email caption) mailto:me@mywebsite.org
 #  (Email caption)<mailto:me@mywebsite.org>
-s#\(<\|\)mailto\(:[a-zA-Z0-9/%?+&=\#_.-]*\(@\|\)[a-zA-Z0-9/%?+&=\#_.-]\+\)\(>\|\)[[:space:]]*(\(\(\\)\|[^)]\)*\))#<a href="mailto\\\2">\5</a>#g;
-s#(\(\(\\)\|[^)]\)*\))[[:space:]]*\(<\|\)mailto\(:[a-zA-Z0-9/%?+&=\#_.-]*\(@\|\)[a-zA-Z0-9/%?+&=\#_.-]\+\)\(>\|\)#<a href="mailto\\\4">\1</a>#g;
+s#\(<\|\)mailto\(:[a-zA-Z0-9/%?+&=#_.-]*\(@\|\)[a-zA-Z0-9/%?+&=#_.-]\{1,\}\)\(>\|\)[[:space:]]*(\(\(\\)\|[^)]\)*\))#<a href="mailto\\\2">\5</a>#g;
+s#(\(\(\\)\|[^)]\)*\))[[:space:]]*\(<\|\)mailto\(:[a-zA-Z0-9/%?+&=#_.-]*\(@\|\)[a-zA-Z0-9/%?+&=#_.-]\{1,\}\)\(>\|\)#<a href="mailto\\\4">\1</a>#g;
 
 # mailto:me@mywebsite.org
 # <mailto:me@mywebsite.org>
-s#\(<\|\)mailto:\([a-zA-Z0-9/%?+&=\#_.-]*\(@\|\)[a-zA-Z0-9/%?+&=\#_.-]\+\)\(>\|\)#<a href="mailto:\2">\2</a>#g;
+s#\(<\|\)mailto:\([a-zA-Z0-9/%?+&=#_.-]*\(@\|\)[a-zA-Z0-9/%?+&=#_.-]\{1,\}\)\(>\|\)#<a href="mailto:\2">\2</a>#g;
 
 # NOTE: To escape a local link, it should be like `\://path/to/a/local/link`
 # ://path/to/a/local/link (Link caption)
 # <://path/to/a/local/link> (Link caption)
 # (Link caption) ://path/to/a/local/link
 # (Link caption) <://path/to/a/local/link>
-s#\([^\\]\|^\)\(<\|\):/\(/[a-zA-Z0-9/%?@+&=\#_.-]\+\)\(>\|\)[[:space:]]*(\(\(\\)\|[^)]\)*\))#\1<a href="\3">\5</a>#g;
-s#(\(\(\\)\|[^)]\)*\))[[:space:]]*\(<\|\):/\(/[a-zA-Z0-9/%?@+&=\#_.-]\+\)\(>\|\)#<a href="\4">\1</a>#g;
+s#\([^\\]\|^\)\(<\|\):/\(/[a-zA-Z0-9/%?@+&=#_.-]\{1,\}\)\(>\|\)[[:space:]]*(\(\(\\)\|[^)]\)*\))#\1<a href="\3">\5</a>#g;
+s#(\(\(\\)\|[^)]\)*\))[[:space:]]*\(<\|\):/\(/[a-zA-Z0-9/%?@+&=#_.-]\{1,\}\)\(>\|\)#<a href="\4">\1</a>#g;
 
 # ://path/to/a/local/link
 # <://path/to/a/local/link>
-s#\([^\\]\|^\)\(<\|\)://\([a-zA-Z0-9/%?@+&=\#_.-]\+\)\(>\|\)#\1<a href="/\3">\3</a>#g;
+s#\([^\\]\|^\)\(<\|\)://\([a-zA-Z0-9/%?@+&=#_.-]\{1,\}\)\(>\|\)#\1<a href="/\3">\3</a>#g;
 
 # Headers
 /^<h[1-6]>/{ s/\\\(.\)/\1/g; p; s/.*//; x; d;}

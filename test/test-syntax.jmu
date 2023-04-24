@@ -17,8 +17,8 @@ Lines ending with a "  " (two spaces) will add a newline at the end
 _Text with an underline_
 ^super^ script
 X^2^
-# Only works on alpha numeric charters
-=sub= script
+# Only works on alpha numeric characters
+ =sub= script
 H=2=O
 ~sub~ script
 H~2~O
@@ -37,8 +37,13 @@ A `code` text
 ===== Header 5
 ====== Header 6
 
-IMAGE: https://path/to/an/image.png 10x20
-src="value"
+IMAGE: https://path/to/an/image.png 10x20 src="value"
+Caption
+IMAGE: https://path/to/an/image.png src="value"
+Caption
+IMAGE: /path/to/an/image.png 10x20 src="value"
+Caption
+IMAGE: /path/to/an/image.png src="value"
 Caption
 
 https://path/to/a/link

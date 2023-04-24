@@ -77,7 +77,7 @@ exec 3<<TEST
 _Text with an underline_
 ^super^ script
 X^2^
-# Only works on alpha numeric charters AND cannot be at the start of the line
+# Only works on alpha numeric characters AND cannot be at the start of the line
  =sub= script
 H=2=O
 ~sub~ script
