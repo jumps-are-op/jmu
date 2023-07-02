@@ -1,9 +1,9 @@
-TO = /usr/local/bin
-VIMRUNTIME =
+.POSIX:
+PREFIX = /usr/local
+DESTDIR = bin
 
-install: jmu.sed
-	cp -- jmu.sed "${TO}/jmu"
-install-syntax:
-	@[ "${VIMRUNTIME}" ] || { echo "You need to specify VIMRUNTIME on the commandline, e.g."; echo "make VIMRUNTIME=/path/to/vim/runtime"; exit 1 ;}
-	./vim-syntax/install.sh "${VIMRUNTIME}"
-	
+install: jmu
+	mv -- jmu ${PREFIX}/${DESTDIR}
+
+jmu:
+	cp jmu.sed jmu
