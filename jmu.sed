@@ -9,7 +9,7 @@ s#^[=-]\{3,\}$#<hr/>#
 s#  $#<br/>#
 
 s#&#&amp;#g;s#&amp;\(\#[[:digit:]]\{1,\}\|[[:lower:]]\{1,\}\);#\&\1;#g
-s/[[:space:]]\{1,\}<[[:space:]]\{1,\}/ \&lt; /g;s/[[:cntrl:]]/ /g
+s/[[:space:]]\{1,\}<[[:space:]]\{1,\}/ \&lt; /g
 
 # ```lang
 # Some code in some language.
@@ -22,7 +22,7 @@ s/[[:space:]]\{1,\}<[[:space:]]\{1,\}/ \&lt; /g;s/[[:cntrl:]]/ /g
 	:cblock
 	N
 	s#&#&amp;#g;s#&amp;\(\#[[:digit:]]\{1,\}\|[[:lower:]]\{1,\}\);#\&\1;#g
-	s/[[:space:]]\{1,\}<[[:space:]]\{1,\}/ \&lt; /g;s/[[:cntrl:]]/ /g
+	s/[[:space:]]\{1,\}<[[:space:]]\{1,\}/ \&lt; /g
 	/\n```$/!{ $!b cblock;}
 	s#^\n##; s#```$#</code></pre>#
 	p;b
