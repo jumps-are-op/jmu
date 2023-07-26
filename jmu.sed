@@ -60,9 +60,6 @@ s#^[[:space:]]*\([[:digit:]]\{1,\}\)\.#<a name="footnote-\1" href="\#footnote-re
     b
 }
 
-# [An externial link](some.link.to/page.html)
-s#\(^\|[^\\]\)\[\(\(\\]\|[^]]\)*\)][[:space:]]*(\([^[:space:])]*\))#\1<a href="\4">\2</a>#g
-
 # IMAGE: https://link.to/image.png
 # Image description.
 \#^[Ii][Mm][Aa][Gg][Ee][[:space:]]*:[[:space:]]*\([^[:space:]]\{1,\}\([[:space:]]\{1,\}.*\)\?\)$#{
@@ -81,6 +78,8 @@ $!{ x;b;}
 
 :end
 s#\n$##
+# [An externial link](some.link.to/page.html)
+s#\(^\|[^\\]\)\[\(\(\\]\|[^]]\)*\)][[:space:]]*(\([^[:space:])]*\))#\1<a href="\4">\2</a>#g
 /<figcaption>/s#.*#<p>&\n</figcaption></caption></p>#p
 /<figcaption>/!s#.*#<p>&</p>#p
 x; s###; x
