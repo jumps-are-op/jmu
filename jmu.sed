@@ -15,7 +15,10 @@ s/[[:space:]]\{1,\}<[[:space:]]\{1,\}/ \&lt; /g
 # Some code in some language.
 # ```
 /^```[[:alnum:]~._-]*$/{
-	x; s#..*#<p>&</p>#p; s###; x;
+	# Have a look at :end
+	x; s#\(^\|[^\\]\)\[\(\(\\]\|[^]]\)*\)][[:space:]]*(\([^[:space:])]*\))#\1<a href="\4">\2</a>#g
+	/<figcaption>/s#.*#<p>&\n</figcaption></caption></p>#p
+	/<figcaption>/!s#.*#<p>&</p>#p; s###; x
 	s#^```$#<pre><code>#p
 	s#^```\(.*\)$#<pre><code class="language-\1">#p
 	s#.*##
@@ -50,7 +53,11 @@ s#^[[:space:]]*\([[:digit:]]\{1,\}\)\.#<a name="footnote-\1" href="\#footnote-re
 # = A header.
 # == Another header.
 /^=\{1,6\}[[:space:]]*[^=].*$/{
-    x; s#..*#<p>&</p>#p; s###; x;
+	# Have a look at :end
+	x; s#\(^\|[^\\]\)\[\(\(\\]\|[^]]\)*\)][[:space:]]*(\([^[:space:])]*\))#\1<a href="\4">\2</a>#g
+	/<figcaption>/s#.*#<p>&\n</figcaption></caption></p>#p
+	/<figcaption>/!s#.*#<p>&</p>#p; s###; x
+	s#\(^\|[^\\]\)\[\(\(\\]\|[^]]\)*\)][[:space:]]*(\([^[:space:])]*\))#\1<a href="\4">\2</a>#g
 	s#^======[[:space:]]*\(.*\)$#<h6>\1</h6>#p
 	s#^=====[[:space:]]*\(.*\)$#<h5>\1</h5>#p
 	s#^====[[:space:]]*\(.*\)$#<h4>\1</h4>#p
