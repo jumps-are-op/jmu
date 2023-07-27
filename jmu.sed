@@ -16,18 +16,17 @@ s/[[:space:]]\{1,\}<[[:space:]]\{1,\}/ \&lt; /g
 # ```
 /^```[[:alnum:]~._-]*$/{
 	# Have a look at :end
-	x; s#\(^\|[^\\]\)\[\(\(\\]\|[^]]\)*\)][[:space:]]*(\([^[:space:])]*\))#\1<a href="\4">\2</a>#g
+	x; /./{ s#\(^\|[^\\]\)\[\(\(\\]\|[^]]\)*\)][[:space:]]*(\([^[:space:])]*\))#\1<a href="\4">\2</a>#g
 	/<figcaption>/s#.*#<p>&\n</figcaption></caption></p>#p
-	/<figcaption>/!s#.*#<p>&</p>#p; s###; x
-	s#^```$#<pre><code>#p
-	s#^```\(.*\)$#<pre><code class="language-\1">#p
-	s#.*##
+	/<figcaption>/!s#.*#<p>&</p>#p; s###;}; x
+	s#^```$#<pre><code>#
+	s#^```\(.*\)$#<pre><code class="language-\1">#
 	:cblock
 	N
 	s#&#&amp;#g;s#&amp;\(\#[[:digit:]]\{1,\}\|[[:lower:]]\{1,\}\);#\&\1;#g
 	s/[[:space:]]\{1,\}<[[:space:]]\{1,\}/ \&lt; /g
 	/\n```$/!{ $!b cblock;}
-	s#^\n##; s#```$#</code></pre>#
+	s#\n##; s#```$#</code></pre>#
 	p;b
 }
 
@@ -54,9 +53,9 @@ s#^[[:space:]]*\([[:digit:]]\{1,\}\)\.#<a name="footnote-\1" href="\#footnote-re
 # == Another header.
 /^=\{1,6\}[[:space:]]*[^=].*$/{
 	# Have a look at :end
-	x; s#\(^\|[^\\]\)\[\(\(\\]\|[^]]\)*\)][[:space:]]*(\([^[:space:])]*\))#\1<a href="\4">\2</a>#g
+	x; /./{ s#\(^\|[^\\]\)\[\(\(\\]\|[^]]\)*\)][[:space:]]*(\([^[:space:])]*\))#\1<a href="\4">\2</a>#g
 	/<figcaption>/s#.*#<p>&\n</figcaption></caption></p>#p
-	/<figcaption>/!s#.*#<p>&</p>#p; s###; x
+	/<figcaption>/!s#.*#<p>&</p>#p; s###;}; x
 	s#\(^\|[^\\]\)\[\(\(\\]\|[^]]\)*\)][[:space:]]*(\([^[:space:])]*\))#\1<a href="\4">\2</a>#g
 	s#^======[[:space:]]*\(.*\)$#<h6>\1</h6>#p
 	s#^=====[[:space:]]*\(.*\)$#<h5>\1</h5>#p
