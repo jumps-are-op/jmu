@@ -18,7 +18,7 @@ s/[[:space:]]\{1,\}<[[:space:]]\{1,\}/ \&lt; /g
 	# Have a look at :end
 	x; /./{ s#\(^\|[^\\]\)\[\(\(\\]\|[^]]\)*\)][[:space:]]*(\([^[:space:])]*\))#\1<a href="\4">\2</a>#g
 	/\(.*\)\(<figure>.*\)/s##<p>\1</p>\2\n</figcaption></figure>#
-	/<figure>.*/!s##<p>&</p>#; s#<p></p>##; p; s#.*##;}; x
+	/<figure>.*/!s#.*#<p>&</p>#; s#<p></p>##; p; s#.*##;}; x
 	s#^```$#<pre><code>#
 	s#^```\(.*\)$#<pre><code class="language-\1">#
 	:cblock
@@ -55,7 +55,7 @@ s#^[[:space:]]*\([[:digit:]]\{1,\}\)\.#<a name="footnote-\1" href="\#footnote-re
 	# Have a look at :end
 	x; /./{ s#\(^\|[^\\]\)\[\(\(\\]\|[^]]\)*\)][[:space:]]*(\([^[:space:])]*\))#\1<a href="\4">\2</a>#g
 	/\(.*\)\(<figure>.*\)/s##<p>\1</p>\2\n</figcaption></figure>#
-	/<figure>.*/!s##<p>&</p>#; s#<p></p>##; p; s#.*##;}; x
+	/<figure>.*/!s#.*#<p>&</p>#; s#<p></p>##; p; s#.*##;}; x
 	s#\(^\|[^\\]\)\[\(\(\\]\|[^]]\)*\)][[:space:]]*(\([^[:space:])]*\))#\1<a href="\4">\2</a>#g
 	s#^======[[:space:]]*\(.*\)$#<h6>\1</h6>#p
 	s#^=====[[:space:]]*\(.*\)$#<h5>\1</h5>#p
@@ -87,7 +87,7 @@ s#\n$##
 # [An externial link](some.link.to/page.html)
 s#\(^\|[^\\]\)\[\(\(\\]\|[^]]\)*\)][[:space:]]*(\([^[:space:])]*\))#\1<a href="\4">\2</a>#g
 /\(.*\)\(<figure>.*\)/s##<p>\1</p>\2\n</figcaption></figure>#
-/<figure>.*/!s##<p>&</p>#; s#<p></p>##; p;
+/<figure>.*/!s#.*#<p>&</p>#; s#<p></p>##; p;
 x; s#.*##; x
 
 /^$/{ x; /^$/b; x;}
