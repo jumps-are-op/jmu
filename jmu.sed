@@ -63,15 +63,15 @@ s#^[[:space:]]*\([[:digit:]]\{1,\}\)\.#<a name="footnote-\1" href="\#footnote-re
 	s#^===[[:space:]]*\(.*\)$#<h3>\1</h3>#p
 	s#^==[[:space:]]*\(.*\)$#<h2>\1</h2>#p
 	s#^=[[:space:]]*\(.*\)$#<h1>\1</h1>#p
-    b
+	b
 }
 
 # IMAGE: https://link.to/image.png
 # Image description.
-\#^[Ii][Mm][Aa][Gg][Ee][[:space:]]*:[[:space:]]*\([^[:space:]]\{1,\}\([[:space:]]\{1,\}.*\)\?\)$#{
-    s##\1#; x; s#$#<figure><a><img src="#; G
-	s#\n\([^[:space:]\n]*\)\([[:space:]][^\n]*\|\)$#\1"\2></a><figcaption>#; x
-	s#.*$#---#
+\#^[Ii][Mm][Aa][Gg][Ee][[:space:]]*:[[:space:]]*\([^[:space:]]\{1,\}\([[:space:]].*\)\{0,1\}\)$#{
+	s##\1#; x; s#$#<figure><a><img src="#; G
+	s#\n\([^[:space:]\n]*\)\(.*\)$#\1"\2></a><figcaption>#
+	x; s#.*#---#
 }
 
 # Paragraphs
