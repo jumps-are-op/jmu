@@ -68,10 +68,9 @@ s#^[[:space:]]*\([[:digit:]]\{1,\}\)\.#<a name="footnote-\1" href="\#footnote-re
 
 # IMAGE: https://link.to/image.png
 # Image description.
-\#^[Ii][Mm][Aa][Gg][Ee][[:space:]]*:[[:space:]]*\([^[:space:]]\{1,\}\([[:space:]].*\)\{0,1\}\)$#{
-	s##\1#; x; s#$#<figure><a><img src="#; G
-	s#\n\([^[:space:]\n]*\)\(.*\)$#\1"\2></a><figcaption>#
-	x; s#.*#---#
+\#^[Ii][Mm][Aa][Gg][Ee][[:space:]]*:[[:space:]]*\([^[:space:]]\{1,\}\)\([[:space:]].*\)\{0,1\}$#{
+	s##<figure><a><img src="\1"\2></a><figcaption#
+
 }
 
 # Paragraphs
@@ -84,7 +83,7 @@ $!{ x;b;}
 
 :end
 s#\n$##
-# [An externial link](some.link.to/page.html)
+# [externial link](link.to/page.html)
 s#\(^\|[^\\]\)\[\(\(\\]\|[^]]\)*\)][[:space:]]*(\([^[:space:])]*\))#\1<a href="\4">\2</a>#g
 /\(.*\)\(<figure>.*\)/s##<p>\1</p>\2\n</figcaption></figure>#
 /<figure>.*/!s#.*#<p>&</p>#; s#<p></p>##; p;
